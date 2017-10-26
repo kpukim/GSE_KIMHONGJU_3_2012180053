@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 #pragma once
 typedef struct Information

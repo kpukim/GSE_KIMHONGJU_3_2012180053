@@ -15,6 +15,7 @@ void SceneMgr::update(float Time)
 	{
 		update(Time);
 	}
+
 }
 void SceneMgr::Renderer()
 {

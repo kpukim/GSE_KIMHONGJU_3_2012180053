@@ -12,7 +12,7 @@ but WITHOUT ANY WARRANTY.
 
 Renderer *g_Renderer = NULL;
 Object * g_Object = NULL;
-
+SceneMgr *g_SceneMgr = NULL;
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -22,6 +22,7 @@ void RenderScene(void)
 		g_Object->GetInfo()->size,g_Object->GetInfo()->r,g_Object->GetInfo()->g,
 		g_Object->GetInfo()->b,g_Object->GetInfo()->a);
 
+	
 	glutSwapBuffers();
 }
 

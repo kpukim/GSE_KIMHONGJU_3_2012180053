@@ -9,6 +9,7 @@ using namespace std;
 #include "Renderer.h"
 #include "Object.h"
 #include "Info.h"
+#include "SceneMgr.h"
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 #define WINSIZEX 500
