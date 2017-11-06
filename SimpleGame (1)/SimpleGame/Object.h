@@ -1,23 +1,26 @@
 #pragma once
-#include <string>
-#pragma once
-typedef struct Information
-{
-	int type;
-	float x, y, z, size, r, g, b, a;
-	int x_dir, y_dir;
+#include <cstdlib>
 
-}Information;
 class Object
 {
 public:
-		Information* m_Info;
-		Renderer* m_Render;
-		virtual void Init() = 0;
-		virtual void Update(float) = 0;
-		virtual void Render() = 0;
-		virtual void Release() = 0;
-		Information* GetInfo();
-		Object();
-		~Object();
+	Object(float x, float y);
+	~Object();
+
+	float GetLife();
+	float GetLifeTime();
+
+	void Update(float elapsedTime);
+
+	float m_x;
+	float m_y;
+	float m_vX;
+	float m_vY;
+
+	float m_size;
+	float m_color[4];
+
+	float m_life;
+	float m_lifeTime;
 };
+

@@ -7,33 +7,78 @@ it under the terms of the What The Hell License. Do it plz.
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY.
 */
+
 #include "stdafx.h"
+#include "windows.h"
+#include<time.h>
+#include "SceneMgr.h"
+#include "Object.h"
+#include <stdlib.h>
+#include <iostream>
+#include "Dependencies\glew.h"
+#include "Dependencies\freeglut.h"
 
-
-Renderer *g_Renderer = NULL;
-Object * g_Object = NULL;
 SceneMgr *g_SceneMgr = NULL;
+
+DWORD g_prevTime = 0;
+
+bool g_LButtonDown = false;
+
 void RenderScene(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	g_Renderer->DrawSolidRect(g_Object->GetInfo()->x,g_Object->GetInfo()->y,g_Object->GetInfo()->z,
-		g_Object->GetInfo()->size,g_Object->GetInfo()->r,g_Object->GetInfo()->g,
-		g_Object->GetInfo()->b,g_Object->GetInfo()->a);
+	DWORD currTime = timeGetTime();
+	DWORD elapsedTime = currTime - g_prevTime;
+	g_prevTime = currTime;
 
-	
+	g_SceneMgr->UpdateAllActorObjects((float)0.1);
+	g_SceneMgr->DrawAllObjects();
+
 	glutSwapBuffers();
 }
 
 void Idle(void)
 {
-	g_Object->Update(0.1);
 	RenderScene();
 }
 
+//button
+//GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, GLUT_RIGHT_BUTTON
+//state
+//GLUT_UP, GLUT_DOWN
 void MouseInput(int button, int state, int x, int y)
 {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		g_LButtonDown = true;
+	}
+
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+	{
+		if (g_LButtonDown)
+		{
+			//clicked
+			for (int i = 0; i < 1; i++)
+				g_SceneMgr->AddActorObject(x - 250, -y + 250);
+		}
+		g_LButtonDown = false;
+	}
+
+	RenderScene();
+}
+
+void MotionInput(int x, int y)
+{
+	if (g_LButtonDown)
+	{
+		//clicked
+		for (int i = 0; i < 100; i++)
+		{
+			//g_SceneMgr->AddActorObject(x - 250, -y + 250);
+		}
+	}
 	RenderScene();
 }
 
@@ -58,32 +103,35 @@ int main(int argc, char **argv)
 
 	glewInit();
 	if (glewIsSupported("GL_VERSION_3_0"))
-		std::cout << " GLEW Version is 3.0\n ";
-
-	else
-		std::cout << "GLEW 3.0 not supported\n ";
-
-
-	// Initialize Renderer
-	g_Renderer = new Renderer(WINSIZEX, WINSIZEY);
-
-	////////////
-	g_Object = new Info();
-
-	if (!g_Renderer->IsInitialized())
 	{
-		std::cout << "Renderer could not be initialized.. \n";
+		std::cout << " GLEW Version is 3.0\n ";
+	}
+	else
+	{
+		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
+	glutMotionFunc(MotionInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
 
+	g_SceneMgr = new SceneMgr(500, 500);
+	/*for (int i = 0; i < 200; i++)
+	{
+	float x = 250.f * 2.f * ((float)std::rand()/(float)RAND_MAX - 0.5f);
+	float y = 250.f * 2.f * ((float)std::rand()/(float)RAND_MAX - 0.5f);
+
+	g_SceneMgr->AddActorObject(x, y);
+	}*/
+
+	g_prevTime = timeGetTime();
+
 	glutMainLoop();
 
-	delete g_Renderer;
+	delete g_SceneMgr;
 
 	return 0;
 }
