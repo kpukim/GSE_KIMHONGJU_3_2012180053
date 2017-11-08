@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 using namespace std;
+
 #include "targetver.h"
 #include <stdio.h>
 #include <tchar.h>
@@ -8,7 +9,7 @@ using namespace std;
 #include <time.h>
 #include "Renderer.h"
 #include "Object.h"
-#include "Info.h"
+#include"SceneMgr.h"
 #include "SceneMgr.h"
 #include<vector>
 #include "Dependencies\glew.h"

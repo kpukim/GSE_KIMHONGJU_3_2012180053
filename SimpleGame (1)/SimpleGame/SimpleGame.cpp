@@ -10,10 +10,9 @@ but WITHOUT ANY WARRANTY.
 
 #include "stdafx.h"
 #include "windows.h"
-#include<time.h>
 #include "SceneMgr.h"
 #include "Object.h"
-#include <stdlib.h>
+#include <mmsystem.h>
 #include <iostream>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
@@ -21,20 +20,17 @@ but WITHOUT ANY WARRANTY.
 SceneMgr *g_SceneMgr = NULL;
 
 DWORD g_prevTime = 0;
-
-bool g_LButtonDown = false;
-
 void RenderScene(void)
 {
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
 
 	DWORD currTime = timeGetTime();
 	DWORD elapsedTime = currTime - g_prevTime;
 	g_prevTime = currTime;
 
-	g_SceneMgr->UpdateAllActorObjects((float)0.1);
-	g_SceneMgr->DrawAllObjects();
+	g_SceneMgr->UpdateObjects((float)elapsedTime);
+	g_SceneMgr->DrawObjects();
 
 	glutSwapBuffers();
 }
@@ -44,43 +40,22 @@ void Idle(void)
 	RenderScene();
 }
 
-//button
-//GLUT_LEFT_BUTTON, GLUT_MIDDLE_BUTTON, GLUT_RIGHT_BUTTON
-//state
-//GLUT_UP, GLUT_DOWN
-void MouseInput(int button, int state, int x, int y)
+void MouseInput(int button, int state, int x, int y )
 {
+	static bool button_state = false;
+	static int count = 0;
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		g_LButtonDown = true;
-	}
-
+		button_state = true;
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		if (g_LButtonDown)
-		{
-			//clicked
-			for (int i = 0; i < 1; i++)
-				g_SceneMgr->AddActorObject(x - 250, -y + 250);
-		}
-		g_LButtonDown = false;
-	}
-
-	RenderScene();
-}
-
-void MotionInput(int x, int y)
-{
-	if (g_LButtonDown)
-	{
-		//clicked
-		for (int i = 0; i < 100; i++)
-		{
-			//g_SceneMgr->AddActorObject(x - 250, -y + 250);
-		}
+		if (button_state) 
+			g_SceneMgr->AddObject(x - 250, 250 - y, OBJECT_CHARACTER);
+		button_state = false;
 	}
 	RenderScene();
 }
+
+
 
 void KeyInput(unsigned char key, int x, int y)
 {
@@ -111,28 +86,21 @@ int main(int argc, char **argv)
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
 
+	
+
+	g_SceneMgr = new SceneMgr(500, 500);
+
+	g_SceneMgr->AddObject(0, 0, OBJECT_BUILDING);
+
+	g_prevTime = timeGetTime();
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
-	glutMotionFunc(MotionInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
-
-	g_SceneMgr = new SceneMgr(500, 500);
-	/*for (int i = 0; i < 200; i++)
-	{
-	float x = 250.f * 2.f * ((float)std::rand()/(float)RAND_MAX - 0.5f);
-	float y = 250.f * 2.f * ((float)std::rand()/(float)RAND_MAX - 0.5f);
-
-	g_SceneMgr->AddActorObject(x, y);
-	}*/
-
-	g_prevTime = timeGetTime();
-
 	glutMainLoop();
 
 	delete g_SceneMgr;
-
 	return 0;
 }
 

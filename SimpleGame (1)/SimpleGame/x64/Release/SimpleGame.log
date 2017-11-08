@@ -1,73 +1,26 @@
 ﻿  stdafx.cpp
-  CMonster.cpp
-c:\users\lg\desktop\simplegame (1)\simplegame\Object.h(28): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
-c:\users\lg\desktop\simplegame (1)\simplegame\Object.h(28): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
-c:\users\lg\desktop\simplegame (1)\simplegame\Object.h(28): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
-c:\users\lg\desktop\simplegame (1)\simplegame\Object.h(39): error C2143: 구문 오류: ';'이(가) '*' 앞에 없습니다.
-c:\users\lg\desktop\simplegame (1)\simplegame\Object.h(39): error C4430: 형식 지정자가 없습니다. int로 가정합니다. 참고: C++에서는 기본 int를 지원하지 않습니다.
-c:\users\lg\desktop\simplegame (1)\simplegame\Object.h(39): error C2238: ';' 앞에 예기치 않은 토큰이 있습니다.
-CMonster.cpp(11): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(11): error C2227: '->x_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(11): note: 'unknown-type' 형식입니다.
-CMonster.cpp(13): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(13): error C2227: '->x_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(13): note: 'unknown-type' 형식입니다.
-CMonster.cpp(15): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(15): error C2227: '->x_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(15): note: 'unknown-type' 형식입니다.
-CMonster.cpp(19): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(19): error C2227: '->y_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(19): note: 'unknown-type' 형식입니다.
-CMonster.cpp(21): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(21): error C2227: '->y_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(21): note: 'unknown-type' 형식입니다.
-CMonster.cpp(23): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(23): error C2227: '->y_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(23): note: 'unknown-type' 형식입니다.
-CMonster.cpp(28): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(28): error C2227: '->x' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(28): note: 'unknown-type' 형식입니다.
-CMonster.cpp(28): error C2227: '->x_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(28): note: 'unknown-type' 형식입니다.
-CMonster.cpp(29): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(29): error C2227: '->y' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(29): note: 'unknown-type' 형식입니다.
-CMonster.cpp(29): error C2227: '->y_dir' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(29): note: 'unknown-type' 형식입니다.
-CMonster.cpp(42): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(43): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(43): error C2227: '->x' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(43): note: 'unknown-type' 형식입니다.
-CMonster.cpp(44): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(44): error C2227: '->y' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(44): note: 'unknown-type' 형식입니다.
-CMonster.cpp(45): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(45): error C2227: '->z' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(45): note: 'unknown-type' 형식입니다.
-CMonster.cpp(46): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(46): error C2227: '->size' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(46): note: 'unknown-type' 형식입니다.
-CMonster.cpp(47): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(47): error C2227: '->r' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(47): note: 'unknown-type' 형식입니다.
-CMonster.cpp(48): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(48): error C2227: '->g' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(48): note: 'unknown-type' 형식입니다.
-CMonster.cpp(49): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(49): error C2227: '->b' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(49): note: 'unknown-type' 형식입니다.
-CMonster.cpp(50): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(50): error C2227: '->type' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(50): note: 'unknown-type' 형식입니다.
-CMonster.cpp(51): error C2065: 'm_Monster': 선언되지 않은 식별자입니다.
-CMonster.cpp(51): error C2227: '->a' 왼쪽은 클래스/구조체/공용 구조체/제네릭 형식을 가리켜야 합니다.
-  CMonster.cpp(51): note: 'unknown-type' 형식입니다.
+c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\Object.h(24): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Object.cpp
-c:\users\lg\desktop\simplegame (1)\simplegame\CMonster.h(26): error C2504: 'Object': 기본 클래스를 정의하지 않았습니다.
+Object.cpp(30): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(32): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(34): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(36): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(47): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(49): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(52): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(54): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Renderer.cpp
-Renderer.cpp(63): warning C4267: '=': 'size_t'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Renderer.cpp(64): warning C4267: '=': 'size_t'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  SceneMgr.cpp
+SceneMgr.cpp(21): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+SceneMgr.cpp(21): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+SceneMgr.cpp(166): warning C4305: '-=': 'double'에서 'float'(으)로 잘립니다.
   SimpleGame.cpp
-c:\users\lg\desktop\simplegame (1)\simplegame\CMonster.h(26): error C2504: 'Object': 기본 클래스를 정의하지 않았습니다.
-SimpleGame.cpp(22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-SimpleGame.cpp(91): error C2440: '=': 'CMonster *'에서 'Object *'(으)로 변환할 수 없습니다.
-  SimpleGame.cpp(91): note: 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+SimpleGame.cpp(52): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다.
+  12 of 186 functions ( 6.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    24 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.exe
+  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.pdb (Full PDB)

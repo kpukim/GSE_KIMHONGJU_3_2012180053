@@ -1,73 +1,77 @@
-#include "stdafx.h"
+#include"stdafx.h"
 #include "Object.h"
-#include <math.h>
 
-Object::Object(float x, float y)
+Object::Object()
 {
-	m_x = x;
-	m_y = y;
-	m_vX = 200.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-	m_vY = 200.f *(((float)std::rand() / (float)RAND_MAX) - 0.5f);
-
-	m_size = 20;
-	m_color[0] = 1;
-	m_color[1] = 1;
-	m_color[2] = 1;
-	m_color[3] = 1;
-
-	m_life = 100.f;
-	m_lifeTime = 100000.f;
 }
-
 Object::~Object()
 {
-
 }
 
-void Object::Update(float elapsedTime)
+Object::Object(float x, float y, OBJECT_TYPE type)
 {
-	float elapsedTimeInSecond = elapsedTime / 1000.f;
-
-	m_x = m_x + m_vX * elapsedTimeInSecond;
-	m_y = m_y + m_vY * elapsedTimeInSecond;
-
-	if (m_x > 250)
+	if (OBJECT_BUILDING==type)
 	{
-		m_vX = -m_vX;
+		Info.size = 80;
+		Info.Life = 50;
+		Info.LifeTime = 10000;
 	}
-
-	if (m_x < -250)
+	if (OBJECT_ARROW==type)
+	{	
+	}
+	if (OBJECT_CHARACTER==type)
 	{
-		m_vX = -m_vX;
+		Info.size = 10;
+		Info.Life = 100;
+		Info.LifeTime = 100000;
+		int randX = rand() % 2;
+		int randY = rand() % 2;
+		if (randX == 0)
+			Info.dirX = 50 + rand() % 10;
+		if (randX == 1)
+			Info.dirX = -(50 + rand() % 10);
+		if (randY == 0)
+			Info.dirY = 50 + rand() % 10;
+		if (randY == 1)
+			Info.dirY = -(50 + rand() % 10);
 	}
-
-	if (m_y > 250)
+	if (OBJECT_BULLET==type)
 	{
-		m_vY = -m_vY;
-	}
+		Info.size = 2;
+		Info.r = 1;
+		Info.g = 0;
+		Info.b = 3;
+		int randX = rand() % 3;
+		int randY = rand() % 3;
+		if (randX == 0)
+			Info.dirX = 10 + rand() % 10;
+		if (randX == 1)
+			Info.dirX = -(10 + rand() % 10);
 
-	if (m_y < -250)
-	{
-		m_vY = -m_vY;
+		if (randY == 0)
+			Info.dirY = 10 + rand() % 10;
+		if (randY == 1)
+			Info.dirY = -(10 + rand() % 10);
+		Info.Life = 100;
+		Info.LifeTime = 100000;
 	}
-
-	if (m_life > 0.f)
-	{
-		m_life -= 0.5f;
-	}
-
-	if (m_lifeTime > 0.f)
-	{
-		//		m_lifeTime -= elapsedTimeInSecond;
-	}
+	Info.x = x;
+	Info.y = y;	
 }
 
-float Object::GetLife()
+void Object::Update(float fTime)
 {
-	return m_life;
+	float Time = fTime / 50.f;	
+	Info.x =Info.x + Info.dirX * Time;
+	Info.y = Info.y + Info.dirY * Time;
+
+	if (240 <= Info.x)
+		Info.dirX *= -1;
+	if (-240 >= Info.x)
+		Info.dirX *= -1;
+	if (-240 >= Info.y)
+		Info.dirY *= -1;
+	if (240 <= Info.y)
+		Info.dirY *= -1;	
 }
 
-float Object::GetLifeTime()
-{
-	return m_lifeTime;
-}

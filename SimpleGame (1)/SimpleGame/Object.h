@@ -1,26 +1,27 @@
 #pragma once
 #include <cstdlib>
+#include"stdafx.h"
+struct Information
+{
+	float x, y, dirX, dirY, size, r, g, b, a, Life, LifeTime, type, speed;
+	enum OBJECT_TYPE _type;
+};
+class SceneMgr;
 
 class Object
 {
 public:
-	Object(float x, float y);
+	Object();
+	Object(float x, float y, enum OBJECT_TYPE);
 	~Object();
 
-	float GetLife();
-	float GetLifeTime();
+public:
+	SceneMgr* g_SceneMgr;
+	Information Info;
 
+	float GetLife()  { return Info.Life; }
+	float GetLifeTime() { return Info.LifeTime; }
+	int Temp() {return Info.Life -= 2; }
 	void Update(float elapsedTime);
-
-	float m_x;
-	float m_y;
-	float m_vX;
-	float m_vY;
-
-	float m_size;
-	float m_color[4];
-
-	float m_life;
-	float m_lifeTime;
 };
 
