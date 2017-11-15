@@ -1,26 +1,43 @@
 ﻿  stdafx.cpp
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\Object.h(24): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LoadPng.cpp
+LoadPng.cpp(800): warning C4334: '<<': 32비트 시프트의 결과가 암시적으로 64비트로 변환됩니다. 64비트 시프트를 사용하시겠습니까?
+LoadPng.cpp(1462): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(1466): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(1538): warning C4267: '=': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(3483): warning C4334: '<<': 32비트 시프트의 결과가 암시적으로 64비트로 변환됩니다. 64비트 시프트를 사용하시겠습니까?
+LoadPng.cpp(3497): warning C4267: '인수': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(4338): warning C4267: '=': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(4386): warning C4267: '=': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(4466): warning C4267: '=': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LoadPng.cpp(5409): warning C4267: '초기화 중': 'size_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Object.cpp
-Object.cpp(30): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(32): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(34): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(36): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(47): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(49): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(52): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-Object.cpp(54): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(35): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(37): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(39): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(41): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(56): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(58): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(60): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(62): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(74): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(76): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(78): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(80): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(89): warning C4305: '-=': 'double'에서 'float'(으)로 잘립니다.
   Renderer.cpp
-Renderer.cpp(64): warning C4267: '=': 'size_t'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Renderer.cpp(110): warning C4267: '=': 'size_t'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Renderer.cpp(381): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
   SceneMgr.cpp
-SceneMgr.cpp(21): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(21): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-SceneMgr.cpp(166): warning C4305: '-=': 'double'에서 'float'(으)로 잘립니다.
+SceneMgr.cpp(28): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+SceneMgr.cpp(28): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+SceneMgr.cpp(229): warning C4154: 배열 식을 삭제했습니다. 포인터로 변환이 제공됩니다.
   SimpleGame.cpp
-SimpleGame.cpp(52): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+SimpleGame.cpp(55): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다.
-  12 of 186 functions ( 6.5%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    24 functions had inline decision re-evaluated but remain unchanged
+c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(102): warning C4715: 'Object::MyCollision': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  19 of 398 functions ( 4.8%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.exe
   SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.pdb (Full PDB)

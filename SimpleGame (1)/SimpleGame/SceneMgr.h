@@ -4,8 +4,8 @@
 #include"stdafx.h"
 #include "Renderer.h"
 #include "Object.h"
-
 #define MAX_OBJECT_COUNT 1000
+#define MAX_CHARACTEROBJECT_COUNT 1
 
 class SceneMgr
 {
@@ -18,15 +18,29 @@ public:
 	void DeleteObject(int );
 	void UpdateObjects(float );
 	void DrawObjects();
-	
-private:
-	bool ColTF(float, float, float, float, float, float, float, float);
-	void Collision();
-	Object *m_Objects[MAX_OBJECT_COUNT];
-	Object *m_bulletObjects[MAX_OBJECT_COUNT];
-	int GetMax();
-	Renderer *m_renderer;
+	int AddArrowObject(float, float, enum OBJECT_TYPE);
+	int AddBuildingObject(float, float, enum OBJECT_TYPE);
+	void DeleteBuildingObject(int);
+	void DeleteArrowObject(int); 
+	bool Col(Object* FObject, Object* SObeject);
 
+
+	int Return() { return m_Objects[MAX_OBJECT_COUNT] != NULL; }
+	int ReturnArr() { return m_arrowObjects[MAX_OBJECT_COUNT] != NULL; }
+	int ReturnArrNull() { return m_arrowObjects[MAX_OBJECT_COUNT] == NULL; }
+private:
+	int num;
+
+
+	Object *m_Objects[MAX_OBJECT_COUNT];
+	Object *m_BuildingObject[MAX_OBJECT_COUNT];
+	Object *m_bulletObjects[MAX_OBJECT_COUNT];
+	Object *m_arrowObjects[MAX_OBJECT_COUNT];
+
+
+
+	Renderer *m_renderer;
+	Renderer* TextRender;
 	int m_Width;
 	int m_Height;
 };

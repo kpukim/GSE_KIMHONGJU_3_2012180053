@@ -1,8 +1,12 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
 #define T 2
-
-//총알오브젝트 함수add추가하고 draw에 bulletob도 추가 업데이트에 추가해서 움직일수있게 bulletob가
+int CharacterCollisionCount = 0;
+int ArrowCollisionCount = 0;
+int BuildingCollisionCount = 0;
+SceneMgr::~SceneMgr()
+{
+}
 SceneMgr::SceneMgr(int width, int height)
 {
 	m_renderer = new Renderer(width, height);
@@ -13,12 +17,15 @@ SceneMgr::SceneMgr(int width, int height)
 	{
 		m_Objects[i] = NULL;
 		m_Objects[i] = NULL;
+		m_arrowObjects[i] = NULL;
+		m_BuildingObject[i] = NULL;
+		m_bulletObjects[i] = NULL;
 	}
 }
 
 void SceneMgr::DrawObjects()
 {
-	m_renderer->DrawSolidRect(1, 1, 0, m_Width, 0,0.3,0.3,1);
+	m_renderer->DrawSolidRect(1, 1, 0, m_Width, 0, 0.3, 0.3, 1);
 
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
@@ -36,7 +43,22 @@ void SceneMgr::DrawObjects()
 				m_Objects[i]->Info.a
 			);
 		}
-		//
+		if (m_BuildingObject[i] != NULL)
+		{
+			m_renderer->DrawTexturedRect
+			(
+				m_BuildingObject[i]->Info.x,
+				m_BuildingObject[i]->Info.y,
+				0,
+				m_BuildingObject[i]->Info.size,
+				m_BuildingObject[i]->Info.r,
+				m_BuildingObject[i]->Info.g,
+				m_BuildingObject[i]->Info.b,
+				m_BuildingObject[i]->Info.a,
+				TextRender->CreatePngTexture("Building.png")
+			);
+		}
+
 		if (m_bulletObjects[i] != NULL)
 		{
 			m_renderer->DrawSolidRect
@@ -51,26 +73,52 @@ void SceneMgr::DrawObjects()
 				m_bulletObjects[i]->Info.a
 			);
 		}
+		if (m_arrowObjects[i] != NULL)
+		{
+			m_renderer->DrawSolidRect
+			(
+				m_arrowObjects[i]->Info.x,
+				m_arrowObjects[i]->Info.y,
+				0,
+				m_arrowObjects[i]->Info.size,
+				m_arrowObjects[i]->Info.r,
+				m_arrowObjects[i]->Info.g,
+				m_arrowObjects[i]->Info.b,
+				m_arrowObjects[i]->Info.a
+			);
+		}
 	}
+	
 }
 
-SceneMgr::~SceneMgr()
-{
-}
 
 int SceneMgr::AddObject(float x, float y, OBJECT_TYPE type)
 {
-	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
 	{
 		if (m_Objects[i] == NULL)
 		{
-			m_Objects[i] = new Object(x, y,type);
+			m_Objects[i] = new Object(x, y, type);
+			AddArrowObject(x, y, OBJECT_ARROW);
+			return i;
+			
+		}
+	}
+
+	return -1;
+}
+int SceneMgr::AddBuildingObject(float x, float y, enum OBJECT_TYPE type)
+{
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
+	{
+		if (m_BuildingObject[i] == NULL)
+		{
+			m_BuildingObject[i] = new Object(x, y, type);
 			return i;
 		}
 	}
 	return -1;
 }
-
 void SceneMgr::DeleteObject(int index)
 {
 	if (m_Objects[index] != NULL)
@@ -79,6 +127,35 @@ void SceneMgr::DeleteObject(int index)
 		m_Objects[index] = NULL;
 	}
 }
+
+void SceneMgr::DeleteBuildingObject(int index)
+{
+	if (m_BuildingObject[index] != NULL)
+	{
+		delete m_BuildingObject[index];
+		m_BuildingObject[index] = NULL;
+	}
+}
+
+void SceneMgr::DeleteArrowObject(int index)
+{
+	if (m_arrowObjects[index] != NULL)
+	{
+		delete m_arrowObjects[index];
+		m_arrowObjects[index] = NULL;
+	}
+}
+
+int SceneMgr::AddArrowObject(float x, float y, enum OBJECT_TYPE type)
+{
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
+	{
+		m_arrowObjects[i] = new Object(m_Objects[i]->Info.x, m_Objects[i]->Info.y, type);
+		return i;	
+	}
+	return -1;
+}
+
 int SceneMgr::AddBulletObject(float x, float y, enum OBJECT_TYPE type)
 {
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
@@ -89,27 +166,28 @@ int SceneMgr::AddBulletObject(float x, float y, enum OBJECT_TYPE type)
 			return i;
 		}
 	}
-	return -1;
+	return -1; 
 }
+
 void SceneMgr::UpdateObjects(float elapsedTime)
 {
-	Collision();
-	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
-	{	
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
+	{
 		if (m_Objects[i] != NULL)
 		{
 			if (m_Objects[i]->GetLife() < 1 || m_Objects[i]->GetLifeTime() < 1)
 			{
 				delete m_Objects[i];
 				m_Objects[i] = NULL;
-			}	
+			}
 			else
-			{			
+			{
 				m_Objects[i]->Update(elapsedTime);
-			}		
+				
+			}
 		}
 	}
-	
+
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
 		if (m_bulletObjects[i] != NULL)
@@ -126,61 +204,76 @@ void SceneMgr::UpdateObjects(float elapsedTime)
 		}
 		AddBulletObject(0, 0, OBJECT_BULLET);
 	}
-}
-int SceneMgr::GetMax()
-{
-	return MAX_OBJECT_COUNT;
-}
-void SceneMgr::Collision()
-{
-	int collisionCount = 0;
-	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
 	{
-		
-			if (m_Objects[i] != NULL)
+		if (m_arrowObjects[i] != NULL)
+		{
+			if (m_arrowObjects[i]->GetLife() < 1 || m_arrowObjects[i]->GetLifeTime() < 1)
 			{
-				for (int j = 0; j < MAX_OBJECT_COUNT; j++)
-				{
-					if (i == j) continue;
-					if (m_Objects[j] != NULL)
-					{
-						float minX, minY, maxX, maxY, minX1, minY1, maxX1, maxY1;
-						minX  = m_Objects[i]->Info.x - m_Objects[i]->Info.size / T;
-						minY  = m_Objects[i]->Info.y - m_Objects[i]->Info.size / T;
-						maxX  = m_Objects[i]->Info.x + m_Objects[i]->Info.size / T;
-						maxY  = m_Objects[i]->Info.y + m_Objects[i]->Info.size / T;
-						minX1 = m_Objects[j]->Info.x - m_Objects[j]->Info.size / T;
-						minY1 = m_Objects[j]->Info.y - m_Objects[j]->Info.size / T;
-						maxX1 = m_Objects[j]->Info.x + m_Objects[j]->Info.size / T;
-						maxY1 = m_Objects[j]->Info.y + m_Objects[j]->Info.size / T;
-						if (ColTF(minX, minY, maxX, maxY, minX1, minY1, maxX1, maxY1))
-							collisionCount++;					
-					}
-				}
-				if (collisionCount > 0)
-				{
-					m_Objects[i]->Info.r = 1;
-					m_Objects[i]->Info.g = 0;
-					m_Objects[i]->Info.b = 0;
-					m_Objects[i]->Info.a = 1;
-					m_Objects[i]->Info.Life -= 0.1;
-				}
-				else
-				{
-					m_Objects[i]->Info.r = 1;
-					m_Objects[i]->Info.g = 1;
-					m_Objects[i]->Info.b = 1;
-					m_Objects[i]->Info.a = 1;
-				}
+				delete m_arrowObjects[i];
+				m_arrowObjects[i] = NULL;
+			}
+			else
+			{
+				m_arrowObjects[i]->Update(elapsedTime);
 			}
 		}
+	}
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
+	{
+		if (m_BuildingObject[i] != NULL)
+		{
+			if (m_BuildingObject[i]->GetLife() < 1 || m_BuildingObject[i]->GetLifeTime() < 1)
+			{
+				delete[] m_BuildingObject;
+				m_BuildingObject[i] = NULL;
+			}
+			else
+			{
+				m_BuildingObject[i]->Update(elapsedTime);
+			}
+		}
+	}
+
+	
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
+	{
+		if (m_Objects[i] != NULL)
+		{
+			if (Col(m_Objects[i], m_BuildingObject[i]))
+			{	
+				DeleteObject(i);
+				m_BuildingObject[i]->Damage(m_BuildingObject[i]->GetLife());
+			}
+		}
+	}
+
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
+	{
+		if (m_arrowObjects[i] != NULL)
+		{
+			if (Col(m_arrowObjects[i], m_BuildingObject[i]))
+			{
+				DeleteArrowObject(i);	
+				m_BuildingObject[i]->Damage(m_BuildingObject[i]->GetLife());
+			}
+		}
+	}
+
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
+	{
+		if (m_Objects[i] == NULL)
+		{
+			DeleteArrowObject(i);
+		}
+	}	
 }
 
-bool SceneMgr::ColTF(float minX, float minY, float maxX, float maxY, float minX1, float minY1, float maxX1, float maxY1)
+bool SceneMgr::Col(Object* FObject, Object* SObeject)
 {
-	if (minX > maxX1) return false;
-	if (maxX < minX1) return false;
-	if (minY > maxY1) return false;
-	if (maxY < minY1) return false;
-	return true;
+	return FObject->MyCollision(SObeject);
 }
+
+
+

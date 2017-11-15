@@ -44,18 +44,32 @@ void MouseInput(int button, int state, int x, int y )
 {
 	static bool button_state = false;
 	static int count = 0;
+	int Time = 0;
+
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 		button_state = true;
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		if (button_state) 
+		if (button_state)
+		{
 			g_SceneMgr->AddObject(x - 250, 250 - y, OBJECT_CHARACTER);
+
+			/*if (g_SceneMgr->AddObject(x ,  y, OBJECT_CHARACTER) && (g_SceneMgr->Return()))
+			{
+				g_SceneMgr->AddArrowObject(x - 250, 250 - y, OBJECT_ARROW);
+			}
+			while (g_SceneMgr->ReturnArrNull())
+			{
+				if (g_SceneMgr->ReturnArr())
+				{
+					continue;
+				}
+			}*/
+		}
 		button_state = false;
 	}
 	RenderScene();
 }
-
-
 
 void KeyInput(unsigned char key, int x, int y)
 {
@@ -69,7 +83,6 @@ void SpecialKeyInput(int key, int x, int y)
 
 int main(int argc, char **argv)
 {
-	// Initialize GL things
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
@@ -90,8 +103,9 @@ int main(int argc, char **argv)
 
 	g_SceneMgr = new SceneMgr(500, 500);
 
-	g_SceneMgr->AddObject(0, 0, OBJECT_BUILDING);
 
+
+	g_SceneMgr->AddBuildingObject(0, 0, OBJECT_BUILDING);
 	g_prevTime = timeGetTime();
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
