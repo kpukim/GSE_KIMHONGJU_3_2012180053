@@ -5,7 +5,7 @@
 #include "Renderer.h"
 #include "Object.h"
 #define MAX_OBJECT_COUNT 1000
-#define MAX_CHARACTEROBJECT_COUNT 1
+#define MAX_CHARACTEROBJECT_COUNT 100
 
 class SceneMgr
 {
@@ -15,11 +15,14 @@ public:
 
 	int AddObject(float , float , enum OBJECT_TYPE);
 	int AddBulletObject(float, float, enum OBJECT_TYPE);
+	int AddBulletObject(float, float, enum OBJECT_TYPE, enum TEAM);
 	void DeleteObject(int );
 	void UpdateObjects(float );
 	void DrawObjects();
 	int AddArrowObject(float, float, enum OBJECT_TYPE);
-	int AddBuildingObject(float, float, enum OBJECT_TYPE);
+	int AddBuildingObject(float, float, enum OBJECT_TYPE, enum TEAM);
+	int AddEnemyBuildingObject(float, float, enum OBJECT_TYPE, enum TEAM);
+
 	void DeleteBuildingObject(int);
 	void DeleteArrowObject(int); 
 	bool Col(Object* FObject, Object* SObeject);
@@ -36,7 +39,7 @@ private:
 	Object *m_BuildingObject[MAX_OBJECT_COUNT];
 	Object *m_bulletObjects[MAX_OBJECT_COUNT];
 	Object *m_arrowObjects[MAX_OBJECT_COUNT];
-
+	Object* m_EnemyBuildingObjects[MAX_OBJECT_COUNT];
 
 
 	Renderer *m_renderer;

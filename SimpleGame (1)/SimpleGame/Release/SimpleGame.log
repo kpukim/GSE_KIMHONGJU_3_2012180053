@@ -1,0 +1,32 @@
+﻿  stdafx.cpp
+  LoadPng.cpp
+  Object.cpp
+Object.cpp(29): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+Object.cpp(30): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+Object.cpp(35): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(37): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(39): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(41): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(55): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(57): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(59): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(61): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(73): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(75): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(77): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(79): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Object.cpp(88): warning C4305: '-=': 'double'에서 'float'(으)로 잘립니다.
+  Renderer.cpp
+Renderer.cpp(381): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  SceneMgr.cpp
+SceneMgr.cpp(28): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+SceneMgr.cpp(28): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+SceneMgr.cpp(265): warning C4154: 배열 식을 삭제했습니다. 포인터로 변환이 제공됩니다.
+  SimpleGame.cpp
+SimpleGame.cpp(55): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다.
+c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(101): warning C4715: 'Object::MyCollision': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  All 399 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\Release\SimpleGame.exe
+  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\Release\SimpleGame.pdb (Full PDB)

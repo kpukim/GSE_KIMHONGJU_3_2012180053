@@ -52,19 +52,8 @@ void MouseInput(int button, int state, int x, int y )
 	{
 		if (button_state)
 		{
-			g_SceneMgr->AddObject(x - 250, 250 - y, OBJECT_CHARACTER);
+			g_SceneMgr->AddObject(x - 250, 400 - y, OBJECT_CHARACTER);
 
-			/*if (g_SceneMgr->AddObject(x ,  y, OBJECT_CHARACTER) && (g_SceneMgr->Return()))
-			{
-				g_SceneMgr->AddArrowObject(x - 250, 250 - y, OBJECT_ARROW);
-			}
-			while (g_SceneMgr->ReturnArrNull())
-			{
-				if (g_SceneMgr->ReturnArr())
-				{
-					continue;
-				}
-			}*/
 		}
 		button_state = false;
 	}
@@ -86,7 +75,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(500, 800);
 	glutCreateWindow("Game Software Engineering KPU");
 
 	glewInit();
@@ -101,11 +90,19 @@ int main(int argc, char **argv)
 
 	
 
-	g_SceneMgr = new SceneMgr(500, 500);
+	g_SceneMgr = new SceneMgr(500, 800);
 
 
+	//Enemy
+	g_SceneMgr->AddEnemyBuildingObject(-180, -350, OBJECT_ENEMYBUILDING,TEAM_2);
+	g_SceneMgr->AddEnemyBuildingObject(0, -350, OBJECT_ENEMYBUILDING,TEAM_2);
+	g_SceneMgr->AddEnemyBuildingObject(180, -350, OBJECT_ENEMYBUILDING, TEAM_2);
 
-	g_SceneMgr->AddBuildingObject(0, 0, OBJECT_BUILDING);
+
+	//My
+	g_SceneMgr->AddBuildingObject(-180, 350, OBJECT_BUILDING, TEAM_1);
+	g_SceneMgr->AddBuildingObject(0, 350, OBJECT_BUILDING, TEAM_1);
+	g_SceneMgr->AddBuildingObject(180, 350, OBJECT_BUILDING, TEAM_1);
 	g_prevTime = timeGetTime();
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

@@ -20,6 +20,7 @@ SceneMgr::SceneMgr(int width, int height)
 		m_arrowObjects[i] = NULL;
 		m_BuildingObject[i] = NULL;
 		m_bulletObjects[i] = NULL;
+		m_EnemyBuildingObjects[i] = NULL;
 	}
 }
 
@@ -56,6 +57,21 @@ void SceneMgr::DrawObjects()
 				m_BuildingObject[i]->Info.b,
 				m_BuildingObject[i]->Info.a,
 				TextRender->CreatePngTexture("Building.png")
+			);
+		}
+		if (m_EnemyBuildingObjects[i] != NULL)
+		{
+			m_renderer->DrawTexturedRect
+			(
+				m_BuildingObject[i]->Info.x,
+				m_BuildingObject[i]->Info.y+-700,
+				0,
+				m_BuildingObject[i]->Info.size,
+				m_BuildingObject[i]->Info.r,
+				m_BuildingObject[i]->Info.g,
+				m_BuildingObject[i]->Info.b,
+				m_BuildingObject[i]->Info.a,
+				TextRender->CreatePngTexture("EnemyBuilding.png")
 			);
 		}
 
@@ -96,29 +112,54 @@ int SceneMgr::AddObject(float x, float y, OBJECT_TYPE type)
 {
 	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
 	{
+		
 		if (m_Objects[i] == NULL)
 		{
 			m_Objects[i] = new Object(x, y, type);
-			AddArrowObject(x, y, OBJECT_ARROW);
+			AddArrowObject(m_Objects[i]->Info.x, m_Objects[i]->Info.y, OBJECT_ARROW);		
 			return i;
-			
 		}
+		
 	}
-
 	return -1;
 }
-int SceneMgr::AddBuildingObject(float x, float y, enum OBJECT_TYPE type)
+int SceneMgr::AddBuildingObject(float x, float y, enum OBJECT_TYPE type, enum TEAM team)
 {
 	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
 	{
 		if (m_BuildingObject[i] == NULL)
 		{
-			m_BuildingObject[i] = new Object(x, y, type);
+			m_BuildingObject[i] = new Object(x, y, type, team);
 			return i;
 		}
 	}
 	return -1;
 }
+
+int SceneMgr::AddEnemyBuildingObject(float x, float y, enum OBJECT_TYPE type, enum TEAM team)
+{
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
+	{
+		if (m_EnemyBuildingObjects[i] == NULL)
+		{
+			m_EnemyBuildingObjects[i] = new Object(x, y, type, team);
+			return i;
+		}
+	}
+	return -1;
+}
+//int SceneMgr::AddEnemyBuildingObject(float x, float y, enum OBJECT_TYPE type)
+//{
+//	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
+//	{
+//		if (m_BuildingObject[i]->Info.TEAM_2 == NULL)
+//		{
+//			m_BuildingObject[i]->Info.TEAM_2 = new Object(x, y, type);
+//			return i;
+//		}
+//	}
+//	return -1;
+//}
 void SceneMgr::DeleteObject(int index)
 {
 	if (m_Objects[index] != NULL)
@@ -150,13 +191,16 @@ int SceneMgr::AddArrowObject(float x, float y, enum OBJECT_TYPE type)
 {
 	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
 	{
-		m_arrowObjects[i] = new Object(m_Objects[i]->Info.x, m_Objects[i]->Info.y, type);
-		return i;	
+		if (m_arrowObjects[i] == NULL)
+		{
+			m_arrowObjects[i] = new Object(x, y, type);
+			return i;
+		}
 	}
 	return -1;
 }
 
-int SceneMgr::AddBulletObject(float x, float y, enum OBJECT_TYPE type)
+int SceneMgr::AddBulletObject(float x, float y, enum OBJECT_TYPE type, enum TEAM team)
 {
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
@@ -182,12 +226,45 @@ void SceneMgr::UpdateObjects(float elapsedTime)
 			}
 			else
 			{
-				m_Objects[i]->Update(elapsedTime);
-				
+				m_Objects[i]->Update(elapsedTime);	
 			}
 		}
 	}
 
+	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	{
+		if (m_bulletObjects[i] != NULL)
+		{
+			if (m_bulletObjects[i]->GetLife() < 0.0001f || m_bulletObjects[i]->GetLifeTime() < 0.0001f)
+			{
+				if (m_Objects[i]->GetType() == OBJECT_CHARACTER)
+				{
+					for (int j = 0; j < MAX_OBJECT_COUNT; j++)
+					{
+						if (m_bulletObjects[j] != NULL && m_arrowObjects[j]->Info._type == OBJECT_ARROW )
+						{
+							delete m_bulletObjects[j];
+							m_bulletObjects[j] = NULL;
+						}
+					}
+				}
+				delete m_bulletObjects[i];
+				m_bulletObjects[i] = NULL;
+			}
+			else
+			{
+				m_bulletObjects[i]->Update(elapsedTime);
+				
+					if (m_bulletObjects[i]->Info.Bullet > 1 )
+					{
+						int bullet = AddBulletObject(m_bulletObjects[i]->Info.x,m_bulletObjects[i]->Info.y,OBJECT_BULLET, TEAM_2);
+						m_bulletObjects[i]->Info.Bullet = 0.f;
+					}
+			}
+		}
+	}
+
+	/*
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
 		if (m_bulletObjects[i] != NULL)
@@ -204,6 +281,7 @@ void SceneMgr::UpdateObjects(float elapsedTime)
 		}
 		AddBulletObject(0, 0, OBJECT_BULLET);
 	}
+	*/
 
 	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
 	{
@@ -239,34 +317,42 @@ void SceneMgr::UpdateObjects(float elapsedTime)
 	
 	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
 	{
-		if (m_Objects[i] != NULL)
+		for (int j = 0; j < MAX_CHARACTEROBJECT_COUNT; ++j)
 		{
-			if (Col(m_Objects[i], m_BuildingObject[i]))
-			{	
-				DeleteObject(i);
-				m_BuildingObject[i]->Damage(m_BuildingObject[i]->GetLife());
-			}
-		}
-	}
-
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
-	{
-		if (m_arrowObjects[i] != NULL)
-		{
-			if (Col(m_arrowObjects[i], m_BuildingObject[i]))
+			if (m_Objects[i] != NULL)
 			{
-				DeleteArrowObject(i);	
-				m_BuildingObject[i]->Damage(m_BuildingObject[i]->GetLife());
+				if (Col(m_Objects[i], m_BuildingObject[j]))
+				{
+					DeleteObject(i);
+					m_BuildingObject[j]->Damage(m_BuildingObject[j]->GetLife());
+				}
 			}
 		}
 	}
 
 	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
 	{
-		if (m_Objects[i] == NULL)
+		for (int j = 0; j < MAX_CHARACTEROBJECT_COUNT; ++j)
 		{
-			DeleteArrowObject(i);
+			if (m_arrowObjects[i] != NULL)
+			{
+				if (Col(m_arrowObjects[i], m_BuildingObject[j]))
+				{
+					DeleteArrowObject(i);
+					m_BuildingObject[j]->Damage(m_BuildingObject[j]->GetLife());
+				}
+			}
 		}
+	}
+
+	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
+	{
+
+			if (m_Objects[i] == NULL)
+			{
+				DeleteArrowObject(i);
+			}
+		
 	}	
 }
 
