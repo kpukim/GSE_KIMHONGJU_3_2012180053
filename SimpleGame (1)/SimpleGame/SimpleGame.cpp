@@ -10,28 +10,29 @@ but WITHOUT ANY WARRANTY.
 
 #include "stdafx.h"
 #include "windows.h"
+
 #include "SceneMgr.h"
 #include "Object.h"
-#include <mmsystem.h>
+
 #include <iostream>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
 SceneMgr *g_SceneMgr = NULL;
-
 DWORD g_prevTime = 0;
+
+bool Button = false;
+
 void RenderScene(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	DWORD currTime = timeGetTime();
-	DWORD elapsedTime = currTime - g_prevTime;
-	g_prevTime = currTime;
+	DWORD CurrentTime = timeGetTime();
+	DWORD elapsedTime = CurrentTime - g_prevTime;
+	g_prevTime = CurrentTime;
 
-	g_SceneMgr->UpdateObjects((float)elapsedTime);
-	g_SceneMgr->DrawObjects();
-
+	g_SceneMgr->UpdateObjects(elapsedTime);
+	g_SceneMgr->DrawObjects(elapsedTime);
 	glutSwapBuffers();
 }
 
@@ -40,22 +41,22 @@ void Idle(void)
 	RenderScene();
 }
 
-void MouseInput(int button, int state, int x, int y )
+void MouseInput(int button, int state, int x, int y)
 {
-	static bool button_state = false;
-	static int count = 0;
-	int Time = 0;
-
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-		button_state = true;
+	{
+		Button = true;
+	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		if (button_state)
+		if (Button)
 		{
-			g_SceneMgr->AddObject(x - 250, 400 - y, OBJECT_CHARACTER);
-
+			for (int i = 0; i < 1; i++)
+			{
+				g_SceneMgr->AddObjects(x - 250, -y + 400, CHARACTER_OBJECT, MYTEAM);
+			}
 		}
-		button_state = false;
+		Button = false;
 	}
 	RenderScene();
 }
@@ -77,7 +78,6 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(500, 800);
 	glutCreateWindow("Game Software Engineering KPU");
-
 	glewInit();
 	if (glewIsSupported("GL_VERSION_3_0"))
 	{
@@ -87,30 +87,22 @@ int main(int argc, char **argv)
 	{
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
-
-	
-
-	g_SceneMgr = new SceneMgr(500, 800);
-
-
-	//Enemy
-	g_SceneMgr->AddEnemyBuildingObject(-180, -350, OBJECT_ENEMYBUILDING,TEAM_2);
-	g_SceneMgr->AddEnemyBuildingObject(0, -350, OBJECT_ENEMYBUILDING,TEAM_2);
-	g_SceneMgr->AddEnemyBuildingObject(180, -350, OBJECT_ENEMYBUILDING, TEAM_2);
-
-
-	//My
-	g_SceneMgr->AddBuildingObject(-180, 350, OBJECT_BUILDING, TEAM_1);
-	g_SceneMgr->AddBuildingObject(0, 350, OBJECT_BUILDING, TEAM_1);
-	g_SceneMgr->AddBuildingObject(180, 350, OBJECT_BUILDING, TEAM_1);
-	g_prevTime = timeGetTime();
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
-	glutMainLoop();
+	g_SceneMgr = new SceneMgr(500, 800);
 
+	g_SceneMgr->AddObjects(-150, 300, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(0, 300, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(150, 300, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(-150, -300, BUILDING_OBJECT, MYTEAM);
+	g_SceneMgr->AddObjects(0, -300, BUILDING_OBJECT, MYTEAM);
+	g_SceneMgr->AddObjects(150, -300, BUILDING_OBJECT, MYTEAM);
+
+	g_prevTime = timeGetTime();
+	glutMainLoop();
 	delete g_SceneMgr;
 	return 0;
 }

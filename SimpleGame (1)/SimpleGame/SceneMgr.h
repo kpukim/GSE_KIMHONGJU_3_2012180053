@@ -1,51 +1,38 @@
 #pragma once
 #include <cstdlib>
 #include <iostream>
-#include"stdafx.h"
 #include "Renderer.h"
 #include "Object.h"
+
 #define MAX_OBJECT_COUNT 1000
-#define MAX_CHARACTEROBJECT_COUNT 100
+#define CHARACTER_OBJECT 0
+#define BUILDING_OBJECT 1
+#define BULLET_OBJECT 2
+#define ARROW_OBJECT 3
+#define ENEMYTEAM 4
+#define MYTEAM 5
 
 class SceneMgr
 {
 public:
 	SceneMgr(int, int);
 	~SceneMgr();
+	int AddObjects(float, float, int, int);
+	void UpdateObjects(float);
+	void DrawObjects(float);
 
-	int AddObject(float , float , enum OBJECT_TYPE);
-	int AddBulletObject(float, float, enum OBJECT_TYPE);
-	int AddBulletObject(float, float, enum OBJECT_TYPE, enum TEAM);
-	void DeleteObject(int );
-	void UpdateObjects(float );
-	void DrawObjects();
-	int AddArrowObject(float, float, enum OBJECT_TYPE);
-	int AddBuildingObject(float, float, enum OBJECT_TYPE, enum TEAM);
-	int AddEnemyBuildingObject(float, float, enum OBJECT_TYPE, enum TEAM);
-
-	void DeleteBuildingObject(int);
-	void DeleteArrowObject(int); 
-	bool Col(Object* FObject, Object* SObeject);
-
-
-	int Return() { return m_Objects[MAX_OBJECT_COUNT] != NULL; }
-	int ReturnArr() { return m_arrowObjects[MAX_OBJECT_COUNT] != NULL; }
-	int ReturnArrNull() { return m_arrowObjects[MAX_OBJECT_COUNT] == NULL; }
 private:
-	int num;
-
-
-	Object *m_Objects[MAX_OBJECT_COUNT];
-	Object *m_BuildingObject[MAX_OBJECT_COUNT];
-	Object *m_bulletObjects[MAX_OBJECT_COUNT];
-	Object *m_arrowObjects[MAX_OBJECT_COUNT];
-	Object* m_EnemyBuildingObjects[MAX_OBJECT_COUNT];
-
-
-	Renderer *m_renderer;
-	Renderer* TextRender;
-	int m_Width;
-	int m_Height;
+	bool TrueFalseCollision(float, float, float, float, float, float, float, float);
+	void Collision();
+	void EnemyCharacter(float);
+	Object *Objects[MAX_OBJECT_COUNT];
+	Object *BulletObjects[MAX_OBJECT_COUNT];
+	Renderer *Rend;
+	int width;
+	int height;
+	int EnemyBuilding = 0;
+	int Building = 0;
+	float EnemyCoolTime = 0;
+	float MyCoolTime = 0;
 };
-
 

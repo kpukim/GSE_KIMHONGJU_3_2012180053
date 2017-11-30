@@ -1,365 +1,291 @@
 #include "stdafx.h"
 #include "SceneMgr.h"
-#define T 2
-int CharacterCollisionCount = 0;
-int ArrowCollisionCount = 0;
-int BuildingCollisionCount = 0;
-SceneMgr::~SceneMgr()
-{
-}
+
 SceneMgr::SceneMgr(int width, int height)
 {
-	m_renderer = new Renderer(width, height);
-	m_Width = width;
-	m_Height = height;
-
+	Rend = new Renderer(width, height);
+	this->width = width;
+	this->height = height;
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
-		m_Objects[i] = NULL;
-		m_Objects[i] = NULL;
-		m_arrowObjects[i] = NULL;
-		m_BuildingObject[i] = NULL;
-		m_bulletObjects[i] = NULL;
-		m_EnemyBuildingObjects[i] = NULL;
+		Objects[i] = NULL;
+		BulletObjects[i] = NULL;
 	}
 }
 
-void SceneMgr::DrawObjects()
+void SceneMgr::DrawObjects(float Time)
 {
-	m_renderer->DrawSolidRect(1, 1, 0, m_Width, 0, 0.3, 0.3, 1);
-
+	Rend->DrawSolidRectXY(0, 0, 0, width, height, 0, 0, 0, 0.3, Time);
+	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
+	Building = Rend->CreatePngTexture("Building.png");
+	int texture = -1;
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
-		if (m_Objects[i] != NULL)
+		if (Objects[i] != NULL)
 		{
-			m_renderer->DrawSolidRect
-			(
-				m_Objects[i]->Info.x,
-				m_Objects[i]->Info.y,
-				0,
-				m_Objects[i]->Info.size,
-				m_Objects[i]->Info.r,
-				m_Objects[i]->Info.g,
-				m_Objects[i]->Info.b,
-				m_Objects[i]->Info.a
-			);
-		}
-		if (m_BuildingObject[i] != NULL)
-		{
-			m_renderer->DrawTexturedRect
-			(
-				m_BuildingObject[i]->Info.x,
-				m_BuildingObject[i]->Info.y,
-				0,
-				m_BuildingObject[i]->Info.size,
-				m_BuildingObject[i]->Info.r,
-				m_BuildingObject[i]->Info.g,
-				m_BuildingObject[i]->Info.b,
-				m_BuildingObject[i]->Info.a,
-				TextRender->CreatePngTexture("Building.png")
-			);
-		}
-		if (m_EnemyBuildingObjects[i] != NULL)
-		{
-			m_renderer->DrawTexturedRect
-			(
-				m_BuildingObject[i]->Info.x,
-				m_BuildingObject[i]->Info.y+-700,
-				0,
-				m_BuildingObject[i]->Info.size,
-				m_BuildingObject[i]->Info.r,
-				m_BuildingObject[i]->Info.g,
-				m_BuildingObject[i]->Info.b,
-				m_BuildingObject[i]->Info.a,
-				TextRender->CreatePngTexture("EnemyBuilding.png")
-			);
-		}
-
-		if (m_bulletObjects[i] != NULL)
-		{
-			m_renderer->DrawSolidRect
-			(
-				m_bulletObjects[i]->Info.x,
-				m_bulletObjects[i]->Info.y,
-				0,
-				m_bulletObjects[i]->Info.size,
-				m_bulletObjects[i]->Info.r,
-				m_bulletObjects[i]->Info.g,
-				m_bulletObjects[i]->Info.b,
-				m_bulletObjects[i]->Info.a
-			);
-		}
-		if (m_arrowObjects[i] != NULL)
-		{
-			m_renderer->DrawSolidRect
-			(
-				m_arrowObjects[i]->Info.x,
-				m_arrowObjects[i]->Info.y,
-				0,
-				m_arrowObjects[i]->Info.size,
-				m_arrowObjects[i]->Info.r,
-				m_arrowObjects[i]->Info.g,
-				m_arrowObjects[i]->Info.b,
-				m_arrowObjects[i]->Info.a
-			);
-		}
-	}
-	
-}
-
-
-int SceneMgr::AddObject(float x, float y, OBJECT_TYPE type)
-{
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-	{
-		
-		if (m_Objects[i] == NULL)
-		{
-			m_Objects[i] = new Object(x, y, type);
-			AddArrowObject(m_Objects[i]->Info.x, m_Objects[i]->Info.y, OBJECT_ARROW);		
-			return i;
-		}
-		
-	}
-	return -1;
-}
-int SceneMgr::AddBuildingObject(float x, float y, enum OBJECT_TYPE type, enum TEAM team)
-{
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-	{
-		if (m_BuildingObject[i] == NULL)
-		{
-			m_BuildingObject[i] = new Object(x, y, type, team);
-			return i;
-		}
-	}
-	return -1;
-}
-
-int SceneMgr::AddEnemyBuildingObject(float x, float y, enum OBJECT_TYPE type, enum TEAM team)
-{
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-	{
-		if (m_EnemyBuildingObjects[i] == NULL)
-		{
-			m_EnemyBuildingObjects[i] = new Object(x, y, type, team);
-			return i;
-		}
-	}
-	return -1;
-}
-//int SceneMgr::AddEnemyBuildingObject(float x, float y, enum OBJECT_TYPE type)
-//{
-//	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-//	{
-//		if (m_BuildingObject[i]->Info.TEAM_2 == NULL)
-//		{
-//			m_BuildingObject[i]->Info.TEAM_2 = new Object(x, y, type);
-//			return i;
-//		}
-//	}
-//	return -1;
-//}
-void SceneMgr::DeleteObject(int index)
-{
-	if (m_Objects[index] != NULL)
-	{
-		delete m_Objects[index];
-		m_Objects[index] = NULL;
-	}
-}
-
-void SceneMgr::DeleteBuildingObject(int index)
-{
-	if (m_BuildingObject[index] != NULL)
-	{
-		delete m_BuildingObject[index];
-		m_BuildingObject[index] = NULL;
-	}
-}
-
-void SceneMgr::DeleteArrowObject(int index)
-{
-	if (m_arrowObjects[index] != NULL)
-	{
-		delete m_arrowObjects[index];
-		m_arrowObjects[index] = NULL;
-	}
-}
-
-int SceneMgr::AddArrowObject(float x, float y, enum OBJECT_TYPE type)
-{
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-	{
-		if (m_arrowObjects[i] == NULL)
-		{
-			m_arrowObjects[i] = new Object(x, y, type);
-			return i;
-		}
-	}
-	return -1;
-}
-
-int SceneMgr::AddBulletObject(float x, float y, enum OBJECT_TYPE type, enum TEAM team)
-{
-	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
-	{
-		if (m_bulletObjects[i] == NULL)
-		{
-			m_bulletObjects[i] = new Object(x, y, type);
-			return i;
-		}
-	}
-	return -1; 
-}
-
-void SceneMgr::UpdateObjects(float elapsedTime)
-{
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-	{
-		if (m_Objects[i] != NULL)
-		{
-			if (m_Objects[i]->GetLife() < 1 || m_Objects[i]->GetLifeTime() < 1)
-			{
-				delete m_Objects[i];
-				m_Objects[i] = NULL;
+			if (Objects[i]->Info.type == BUILDING_OBJECT)
+			{		
+				if (Objects[i]->Info.team == ENEMYTEAM)
+				{
+					texture = EnemyBuilding;
+				}
+				else if (Objects[i]->Info.team == MYTEAM)
+				{
+					texture = Building;
+				}
+				Rend->DrawTexturedRect(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y,
+					0,
+					Objects[i]->Info.size,
+					Objects[i]->Info.r,
+					Objects[i]->Info.g,
+					Objects[i]->Info.b,
+					Objects[i]->Info.a,
+					texture
+				);
 			}
+
+			/*Rend->DrawTexturedRect(
+				Objects[i]->Info.x,
+				Objects[i]->Info.y,
+				0,
+				Objects[i]->Info.size,
+				1,
+				1,
+				1,
+				1,
+				texture,
+				0.1f
+			);
+
+			Rend->DrawSolidRectGauge(
+				Objects[i]->Info.x,
+				Objects[i]->Info.y + Objects[i]->Info.size / 2,
+				0,
+				100,
+				10,
+				Objects[i]->Info.r,
+				Objects[i]->Info.g,
+				Objects[i]->Info.b,
+				1.f,
+				Objects[i]->Info.life / 500,
+				0.01f
+			);*/
 			else
 			{
-				m_Objects[i]->Update(elapsedTime);	
+				Rend->DrawSolidRect(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y,
+					0,
+					Objects[i]->Info.size,
+					Objects[i]->Info.r,
+					Objects[i]->Info.g,
+					Objects[i]->Info.b,
+					Objects[i]->Info.a,
+					Time
+				);
 			}
 		}
 	}
+}
+
+SceneMgr::~SceneMgr()
+{
+	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	{
+		if (Objects[i] == NULL)
+		{
+			delete Objects[i];
+			Objects[i] = NULL;
+		}
+	}
+	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	{
+		if (BulletObjects[i] == NULL)
+		{
+			delete BulletObjects[i];
+			BulletObjects[i] = NULL;
+		}
+	}
+}
+
+int SceneMgr::AddObjects(float x, float y, int type, int team)
+{
+	if (team == MYTEAM && type == CHARACTER_OBJECT)
+	{
+		if (MyCoolTime < 7.f)
+		{
+			return -1;
+		}
+		if (y > 0)
+		{
+			return -1;
+		}
+		MyCoolTime = 0.f;
+	}
+	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	{
+		if (Objects[i] == NULL)
+		{
+			Objects[i] = new Object(x, y, type, width, height, team);
+			return i;
+		}
+	}
+	return -1;
+}
+
+void SceneMgr::EnemyCharacter(float Time)
+{
+	EnemyCoolTime += Time / 1000.f;
+	if (EnemyCoolTime > 5.f)
+	{
+		int x, y;
+		x = (int)(height * rand() / (float)RAND_MAX);
+		y = (int)(width * rand() / (float)RAND_MAX);
+		AddObjects(x, y, CHARACTER_OBJECT, ENEMYTEAM);
+		EnemyCoolTime = 0.f;
+	}
+}
+void SceneMgr::UpdateObjects(float Time)
+{
+	MyCoolTime += Time / 1000;
+	EnemyCharacter(Time);
+	Collision();
 
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
-		if (m_bulletObjects[i] != NULL)
+		if (Objects[i] != NULL)
 		{
-			if (m_bulletObjects[i]->GetLife() < 0.0001f || m_bulletObjects[i]->GetLifeTime() < 0.0001f)
+			if (Objects[i]->GetLife() < 0.0001f || Objects[i]->GetLifeTime() < 0.0001f)
 			{
-				if (m_Objects[i]->GetType() == OBJECT_CHARACTER)
+				if (Objects[i]->GetType() == CHARACTER_OBJECT)
 				{
 					for (int j = 0; j < MAX_OBJECT_COUNT; j++)
 					{
-						if (m_bulletObjects[j] != NULL && m_arrowObjects[j]->Info._type == OBJECT_ARROW )
+						if (Objects[j] != NULL && Objects[j]->Info.type == ARROW_OBJECT)
 						{
-							delete m_bulletObjects[j];
-							m_bulletObjects[j] = NULL;
+							delete Objects[j];
+							Objects[j] = NULL;
 						}
 					}
 				}
-				delete m_bulletObjects[i];
-				m_bulletObjects[i] = NULL;
+				delete Objects[i];
+				Objects[i] = NULL;
 			}
 			else
 			{
-				m_bulletObjects[i]->Update(elapsedTime);
-				
-					if (m_bulletObjects[i]->Info.Bullet > 1 )
+				Objects[i]->Update(Time);
+				if (Objects[i]->GetType() == BUILDING_OBJECT)
+				{
+					if (Objects[i]->Info.bullet > 10.f)
 					{
-						int bullet = AddBulletObject(m_bulletObjects[i]->Info.x,m_bulletObjects[i]->Info.y,OBJECT_BULLET, TEAM_2);
-						m_bulletObjects[i]->Info.Bullet = 0.f;
+						int bulletID = AddObjects(
+							Objects[i]->Info.x,
+							Objects[i]->Info.y,
+							BULLET_OBJECT,
+							Objects[i]->Info.team);
+
+						Objects[i]->Info.bullet = 0.f;
+
 					}
+				}
+				if (Objects[i]->GetType() == CHARACTER_OBJECT)
+				{
+					if (Objects[i]->Info.arrow > 3.f)
+					{
+						int arrowID = AddObjects(Objects[i]->Info.x, Objects[i]->Info.y, ARROW_OBJECT, Objects[i]->Info.team);
+						Objects[i]->Info.arrow = 0.f;
+					}
+				}
 			}
 		}
+		if (BulletObjects[i] != NULL)
+		{
+			BulletObjects[i]->Update(Time);
+		}
 	}
+}
 
-	/*
+void SceneMgr::Collision()
+{
+	int collisionCount = 0;
+
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
-		if (m_bulletObjects[i] != NULL)
+		collisionCount = 0;
+		if (Objects[i] != NULL)
 		{
-			if (m_bulletObjects[i]->GetLife() < 1 || m_bulletObjects[i]->GetLifeTime() < 1)
+			for (int j = i + 1; j < MAX_OBJECT_COUNT; j++)
 			{
-				delete m_bulletObjects[i];
-				m_bulletObjects[i] = NULL;
-			}
-			else
-			{
-				m_bulletObjects[i]->Update(elapsedTime);
-			}
-		}
-		AddBulletObject(0, 0, OBJECT_BULLET);
-	}
-	*/
-
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; i++)
-	{
-		if (m_arrowObjects[i] != NULL)
-		{
-			if (m_arrowObjects[i]->GetLife() < 1 || m_arrowObjects[i]->GetLifeTime() < 1)
-			{
-				delete m_arrowObjects[i];
-				m_arrowObjects[i] = NULL;
-			}
-			else
-			{
-				m_arrowObjects[i]->Update(elapsedTime);
-			}
-		}
-	}
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
-	{
-		if (m_BuildingObject[i] != NULL)
-		{
-			if (m_BuildingObject[i]->GetLife() < 1 || m_BuildingObject[i]->GetLifeTime() < 1)
-			{
-				delete[] m_BuildingObject;
-				m_BuildingObject[i] = NULL;
-			}
-			else
-			{
-				m_BuildingObject[i]->Update(elapsedTime);
-			}
-		}
-	}
-
-	
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
-	{
-		for (int j = 0; j < MAX_CHARACTEROBJECT_COUNT; ++j)
-		{
-			if (m_Objects[i] != NULL)
-			{
-				if (Col(m_Objects[i], m_BuildingObject[j]))
+				if (Objects[j] != NULL && Objects[i] != NULL)
 				{
-					DeleteObject(i);
-					m_BuildingObject[j]->Damage(m_BuildingObject[j]->GetLife());
+					float minX, minY, minX1, minY1, maxX, maxY, maxX1, maxY1;
+
+					minX = Objects[i]->Info.x - Objects[i]->Info.size / 2;
+					minY = Objects[i]->Info.y - Objects[i]->Info.size / 2;
+					maxX = Objects[i]->Info.x + Objects[i]->Info.size / 2;
+					maxY = Objects[i]->Info.y + Objects[i]->Info.size / 2;
+					minX1 = Objects[j]->Info.x - Objects[j]->Info.size / 2;
+					minY1 = Objects[j]->Info.y - Objects[j]->Info.size / 2;
+					maxX1 = Objects[j]->Info.x + Objects[j]->Info.size / 2;
+					maxY1 = Objects[j]->Info.y + Objects[j]->Info.size / 2;
+					if (TrueFalseCollision(minX, minY, maxX, maxY, minX1, minY1, maxX1, maxY1))
+					{
+						if ((Objects[i]->GetType() == BUILDING_OBJECT) && (Objects[j]->GetType() == CHARACTER_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[i]->SetDamage(Objects[j]->GetLife());
+							Objects[j]->Info.life = 0.f;
+							collisionCount++;
+						}
+						else if ((Objects[j]->GetType() == BUILDING_OBJECT) && (Objects[i]->GetType() == CHARACTER_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[j]->SetDamage(Objects[i]->GetLife());
+							Objects[i]->Info.life = 0.f;
+							collisionCount++;
+						}
+						else if ((Objects[i]->GetType() == CHARACTER_OBJECT) && (Objects[j]->GetType() == BULLET_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[i]->SetDamage(Objects[j]->GetLife());
+							Objects[j]->Info.life = 0.f;
+						}
+						else if ((Objects[j]->GetType() == CHARACTER_OBJECT) && (Objects[i]->GetType() == BULLET_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[j]->SetDamage(Objects[i]->GetLife());
+							Objects[i]->Info.life = 0.f;
+						}
+						else if ((Objects[i]->GetType() == CHARACTER_OBJECT) && (Objects[j]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[i]->SetDamage(Objects[j]->GetLife());
+							Objects[j]->Info.life = 0.f;
+						}
+						else if ((Objects[j]->GetType() == CHARACTER_OBJECT) && (Objects[i]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[j]->SetDamage(Objects[i]->GetLife());
+							Objects[i]->Info.life = 0.f;
+						}
+						else if ((Objects[i]->GetType() == BUILDING_OBJECT) && (Objects[j]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[i]->SetDamage(Objects[j]->GetLife());
+							Objects[j]->Info.life = 0.f;
+						}
+						else if ((Objects[j]->GetType() == BUILDING_OBJECT) && (Objects[i]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
+						{
+							Objects[j]->SetDamage(Objects[i]->GetLife());
+							Objects[i]->Info.life = 0.f;
+						}
+					}
 				}
 			}
 		}
 	}
-
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
-	{
-		for (int j = 0; j < MAX_CHARACTEROBJECT_COUNT; ++j)
-		{
-			if (m_arrowObjects[i] != NULL)
-			{
-				if (Col(m_arrowObjects[i], m_BuildingObject[j]))
-				{
-					DeleteArrowObject(i);
-					m_BuildingObject[j]->Damage(m_BuildingObject[j]->GetLife());
-				}
-			}
-		}
-	}
-
-	for (int i = 0; i < MAX_CHARACTEROBJECT_COUNT; ++i)
-	{
-
-			if (m_Objects[i] == NULL)
-			{
-				DeleteArrowObject(i);
-			}
-		
-	}	
 }
 
-bool SceneMgr::Col(Object* FObject, Object* SObeject)
+bool SceneMgr::TrueFalseCollision(float minX, float minY, float maxX, float maxY, float minX1, float minY1, float maxX1, float maxY1)
 {
-	return FObject->MyCollision(SObeject);
+	if (minX > maxX1)return false;
+	if (maxX < minX1)return false;
+	if (minY > maxY1)return false;
+	if (maxY < minY1)return false;
+	return true;
 }
-
-
-

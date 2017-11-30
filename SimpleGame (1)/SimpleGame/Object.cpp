@@ -1,200 +1,163 @@
-#include"stdafx.h"
+#include "stdafx.h"
 #include "Object.h"
+#include "SceneMgr.h"
+#include <math.h>
 
-Object::Object()
+
+Object::Object(float x, float y, int type, int fieldWidth, int fieldHeight, int team)
 {
+	Info.team = team;
+	Info.width = fieldWidth;
+	Info.height = fieldHeight;
+	Info.x = x;
+	Info.y = y;
+	Info.type = type;
+	Info.bullet = 0;
+	Info.arrow = 0;
+	if (type == BUILDING_OBJECT)
+	{
+		if (Info.team == ENEMYTEAM)
+		{
+			Info.r = 1;
+			Info.g = 1;
+			Info.b = 1;
+			Info.a = 1;
+		}
+		else if (Info.team == MYTEAM)
+		{
+			Info.r = 1;
+			Info.g = 1;
+			Info.b = 1;
+			Info.a = 1;
+		}
+		Info.dirX = 0;
+		Info.dirY = 0;
+
+		Info.size = 100;
+		Info.life = 500;
+
+		Info.lifetime = 100000;
+	}
+	else if (type == CHARACTER_OBJECT)
+	{
+		if (Info.team == ENEMYTEAM)
+		{
+			Info.r = 1;
+			Info.g = 0;
+			Info.b = 0;
+			Info.a = 1;
+		}
+		else if (Info.team == MYTEAM)
+		{
+			Info.r = 0;
+			Info.g = 0;
+			Info.b = 1;
+			Info.a = 1;
+		}
+		float randX, randY = 0;
+		randX = rand() % 3 + 1;
+		randY = rand() % 3 + 1;
+		if (randX == 0)
+			Info.dirX = rand() % 100;
+		if (randX == 1)
+			Info.dirX = rand() % 100;
+		if (randX == 2)
+			Info.dirX = rand() % 100;
+
+		if (randY == 0)
+			Info.dirY = rand() % 100;
+		if (randY == 1)
+			Info.dirY = rand() % 100;
+		if (randY == 2)
+			Info.dirY = rand() % 100;
+
+		Info.size = 30;
+		Info.life = 100;
+
+		Info.lifetime = 100000;
+	}
+	else if (type == BULLET_OBJECT)
+	{
+		if (Info.team == ENEMYTEAM)
+		{
+			Info.r = 1;
+			Info.g = 0;
+			Info.b = 0;
+			Info.a = 1;
+		}
+		else if (Info.team == MYTEAM)
+		{
+			Info.r = 0;
+			Info.g = 0;
+			Info.b = 1;
+			Info.a = 1;
+		}
+		float randX, randY = 0;
+		randX = rand() % 3 + 1;
+		randY = rand() % 3 + 1;
+		if (randX == 0)
+			Info.dirX = rand() % 100;
+		if (randX == 1)
+			Info.dirX = rand() % 100;
+		if (randX == 2)
+			Info.dirX = rand() % 100;
+
+		if (randY == 0)
+			Info.dirY = rand() % 100;
+		if (randY == 1)
+			Info.dirY = rand() % 100;
+		if (randY == 2)
+			Info.dirY = rand() % 100;
+		Info.size = 4;
+		Info.life = 15;
+		Info.lifetime = 100000;
+	}
+	else if (type == ARROW_OBJECT)
+	{
+		if (Info.team == ENEMYTEAM)
+		{
+			Info.r = 0.7;
+			Info.g = 0.5;
+			Info.b = 0.5;
+			Info.a = 1;
+		}
+		else if (Info.team == MYTEAM)
+		{
+			Info.r = 1;
+			Info.g = 1;
+			Info.b = 0;
+			Info.a = 1;
+		}
+		float randX, randY = 0;
+		randX = rand() % 3 + 1;
+		randY = rand() % 3 + 1;
+		if (randX == 0)
+			Info.dirX = rand() % 100;
+		if (randX == 1)
+			Info.dirX = rand() % 100;
+		if (randX == 2)
+			Info.dirX = rand() % 100;
+
+		if (randY == 0)
+			Info.dirY = rand() % 100;
+		if (randY == 1)
+			Info.dirY = rand() % 100;
+		if (randY == 2)
+			Info.dirY = rand() % 100;
+		Info.size = 4;
+		Info.life = 10;
+		Info.lifetime = 100000;
+	}
 }
 Object::~Object()
 {
 }
-Object::Object(float x, float y, OBJECT_TYPE type, TEAM team)
+void Object::Update(float Time)
 {
-	if (OBJECT_BUILDING == type)
-	{
-		Info.size = 80;
-		Info.Life = 10000;
-		Info.LifeTime = 10000;
-		Info.a = 1;
-	}
-	if (OBJECT_ENEMYBUILDING)
-	{
-		Info.size = 80;
-		Info.Life = 10000;
-		Info.LifeTime = 10000;
-		Info.a = 1;
-	}
-	if (OBJECT_ARROW == type)
-	{
-		Info.size = 6;
-		Info.Life = 2;
-		Info.LifeTime = 10000;
-		Info.r = 0.5;
-		Info.g = 0.2;
-		Info.b = 0.7;
-		Info.a = 1;
-		int randX = rand() % 2;
-		int randY = rand() % 2;
-		if (randX == 0)
-			Info.dirX = 5 + rand() % 10;
-		if (randX == 1)
-			Info.dirX = -(5 + rand() % 10);
-		if (randY == 0)
-			Info.dirY = 5 + rand() % 10;
-		if (randY == 1)
-			Info.dirY = -(5 + rand() % 10);
-	}
-	if (OBJECT_CHARACTER == type)
-	{
-		Info.size = 20;
-		Info.Life = 10;
-		Info.LifeTime = 10000;
-		Info.r = 0;
-		Info.g = 0;
-		Info.b = 1;
-		Info.a = 1;
-		int randX = rand() % 2;
-		int randY = rand() % 2;
-		if (randX == 0)
-			Info.dirX = +rand() % 10;
-		if (randX == 1)
-			Info.dirX = +rand() % 10;
-		if (randY == 0)
-			Info.dirY = +rand() % 10;
-		if (randY == 1)
-			Info.dirY = +rand() % 10;
-	}
-	if (OBJECT_BULLET == type)
-	{
-		Info.size = 2;
-		Info.r = 1;
-		Info.g = 0;
-		Info.b = 0;
-		Info.a = 1;
-		int randX = rand() % 2;
-		int randY = rand() % 2;
-		if (randX == 0)
-			Info.dirX = 50 + rand() % 10;
-		if (randX == 1)
-			Info.dirX = -(50 + rand() % 10);
-		if (randY == 0)
-			Info.dirY = 50 + rand() % 10;
-		if (randY == 1)
-			Info.dirY = -(50 + rand() % 10);
-		Info.Life = 100;
-		Info.LifeTime = 10000;
-	}
-	Info.x = x;
-	Info.y = y;
-}
-Object::Object(float x, float y, OBJECT_TYPE type)
-{
-	if (OBJECT_BUILDING==type)
-	{
-		Info.size = 80;
-		Info.Life = 10000;
-		Info.LifeTime = 10000;
-		Info.a = 1;
-	}
-	if (OBJECT_ARROW==type)
-	{	
-		Info.size = 6;
-		Info.Life = 2;
-		Info.LifeTime = 10000;
-		Info.r = 1;
-		Info.g = 1;
-		Info.b = 0;
-		Info.a = 1;
-		int randX = rand() % 2;
-		int randY = rand() % 2;
-		if (randX == 0)
-			Info.dirX = 5 + rand() % 10;
-		if (randX == 1)
-			Info.dirX = -(5 + rand() % 10);
-		if (randY == 0)
-			Info.dirY = 5 + rand() % 10;
-		if (randY == 1)
-			Info.dirY = -(5 + rand() % 10);
-	}
-	if (OBJECT_CHARACTER==type)
-	{
-		Info.size = 20;
-		Info.Life = 10;
-		Info.LifeTime = 10000;
-		Info.r = 0;
-		Info.g = 0;
-		Info.b = 1;
-		Info.a = 1;
-		int randX = rand() % 2;
-		int randY = rand() % 2;
-		if (randX == 0)
-			Info.dirX =  + rand() % 10;
-		if (randX == 1)
-			Info.dirX =  + rand() % 10;
-		if (randY == 0)
-			Info.dirY =  + rand() % 10;
-		if (randY == 1)
-			Info.dirY =  + rand() % 10;
-	}
-	if (OBJECT_BULLET==type)
-	{
-		Info.size = 2;
-		Info.r = 1;
-		Info.g = 0;
-		Info.b = 0;
-		Info.a = 1;
-		int randX = rand() % 2;
-		int randY = rand() % 2;
-		if (randX == 0)
-			Info.dirX = 50 + rand() % 10;
-		if (randX == 1)
-			Info.dirX = -(50 + rand() % 10);
-		if (randY == 0)
-			Info.dirY = 50 + rand() % 10;
-		if (randY == 1)
-			Info.dirY = -(50 + rand() % 10);
-		Info.Life = 100;
-		Info.LifeTime = 10000;
-	}
-	Info.x = x;
-	Info.y = y;	
-}
-void Object::Damage(float n)
-{
-	Info.Life -= 0.1;
-}
-bool Object::MyCollision(Object* Object)
-{
-	if (Object != NULL)
-	{
-		return(
-			Info.x - Info.size / 2 < Object->Info.x + Object->Info.size / 2 &&
-			Info.x + Info.size / 2 > Object->Info.x - Object->Info.size / 2 &&
-			Info.y - Info.size / 2 < Object->Info.y + Object->Info.size / 2 &&
-			Info.y + Info.size / 2 > Object->Info.y - Object->Info.size / 2
-			);
-	}
-}
-int Object::GetType()
-{
-	return Info._type;
-}
-void Object::Update(float fTime)
-{
-	float elapsedTimeInSecond = fTime / 50;
-
-	Info.Bullet += elapsedTimeInSecond;
-	Info.x =Info.x + Info.dirX * elapsedTimeInSecond;
+	float elapsedTimeInSecond = Time / 1000;
+	Info.bullet += elapsedTimeInSecond;
+	Info.arrow += elapsedTimeInSecond;
+	Info.x = Info.x + Info.dirX * elapsedTimeInSecond;
 	Info.y = Info.y + Info.dirY * elapsedTimeInSecond;
-	 
-
-	if (240 <= Info.x)
-		Info.dirX *= -1;
-	if (-240 >= Info.x)
-		Info.dirX *= -1;
-	if (-380 >= Info.y)
-		Info.dirY *= -1;
-	if (400 <= Info.y)
-		Info.dirY *= -1;	
-
 }
 

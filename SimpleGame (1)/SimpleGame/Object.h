@@ -1,36 +1,21 @@
 #pragma once
 #include <cstdlib>
-#include"stdafx.h"
-//#define MAX_OBJECT_COUNT 1000
 
 struct Information
 {
-	float x, y, dirX, dirY, size, r, g, b, a, Life, LifeTime, speed;
-	float Bullet;
-	enum OBJECT_TYPE _type;
-	enum TEAM _team;
+	float x, y, dirX, dirY, r, g, b, a, size, life, lifetime;
+	int team, type;
+	float width, height, bullet, arrow;
 };
-class SceneMgr;
-
 class Object
 {
-private:
-
 public:
-	Object();
-	Object(float x, float y, enum OBJECT_TYPE);
-	Object(float x, float y, enum OBJECT_TYPE type, enum TEAM team);
+	Object(float, float, int, int, int, int);
 	~Object();
-
-public:
-	Renderer* textRenderer;
-	SceneMgr* g_SceneMgr;
 	Information Info;
-	bool MyCollision(Object* Object);
-	float GetLife() { return Info.Life; }
-	float GetLifeTime() { return Info.LifeTime; }
-	void Update(float elapsedTime);
-	void Damage(float num);
-	int GetType();
+	float GetLife() { return Info.life; }
+	float GetLifeTime() { return Info.lifetime; }
+	int GetType() { return Info.type; }
+	void SetDamage(float num) { Info.life -= num; }
+	void Update(float);
 };
-

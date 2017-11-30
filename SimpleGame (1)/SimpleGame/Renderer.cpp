@@ -20,9 +20,10 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Load shaders
 	m_SolidRectShader = CompileShaders("./Shaders/SolidRect.vs", "./Shaders/SolidRect.fs");
+	m_SolidRectXYShader = CompileShaders("./Shaders/SolidRectXY.vs", "./Shaders/SolidRectXY.fs");
 	m_SolidRectWithTextureShader = CompileShaders("./Shaders/SolidRectWithTexture.vs", "./Shaders/SolidRectWithTexture.fs");
 	m_SolidRectWithTextureSeqShader = CompileShaders("./Shaders/SolidRectWithTextureSeq.vs", "./Shaders/SolidRectWithTextureSeq.fs");
-	
+
 	//Create VBOs
 	CreateVertexBufferObjects();
 
@@ -67,12 +68,12 @@ void Renderer::CreateVertexBufferObjects()
 	float rect[]
 		=
 	{
-		-1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, 
+		-1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f,
 		-1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f,
-		 1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, //Triangle1
-		-1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, 
-		 1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f,
-		 1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, //Triangle2
+		1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, //Triangle1
+		-1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f,
+		1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f,
+		1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, //Triangle2
 	};
 
 	glGenBuffers(1, &m_VBORect);
@@ -84,10 +85,10 @@ void Renderer::CreateVertexBufferObjects()
 	{
 		-1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, 0.f, 0.f,
 		-1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, 0.f, 1.f,
-		 1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, 1.f, 1.f,        //Triangle1
+		1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, 1.f, 1.f,        //Triangle1
 		-1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, 0.f, 0.f,
-		 1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, 1.f, 1.f,
-		 1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, 1.f, 0.f,        //Triangle2
+		1.f / m_WindowSizeX, 1.f / m_WindowSizeY, 0.f, 1.f, 1.f,
+		1.f / m_WindowSizeX, -1.f / m_WindowSizeY, 0.f, 1.f, 0.f,        //Triangle2
 	};
 
 	glGenBuffers(1, &m_VBORectTex);
@@ -205,7 +206,7 @@ GLuint Renderer::CompileShaders(char* filenameVS, char* filenameFS)
 	return ShaderProgram;
 }
 
-void Renderer::DrawSolidRect(float x, float y, float z, float size, float r, float g, float b, float a)
+void Renderer::DrawSolidRect(float x, float y, float z, float size, float r, float g, float b, float a, float elapsedTime)
 {
 	float newX, newY;
 
@@ -232,6 +233,108 @@ void Renderer::DrawSolidRect(float x, float y, float z, float size, float r, flo
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Renderer::DrawSolidRectXY(float x, float y, float z, float width, float height, float r, float g, float b, float a, float elapsedTime)
+{
+	float newX, newY;
+
+	GetGLPosition(x, y, &newX, &newY);
+
+	//Program select
+	glUseProgram(m_SolidRectXYShader);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glUniform4f(glGetUniformLocation(m_SolidRectXYShader, "u_Trans"), newX, newY, width, height);
+	glUniform4f(glGetUniformLocation(m_SolidRectXYShader, "u_Color"), r, g, b, a);
+
+	int attribPosition = glGetAttribLocation(m_SolidRectXYShader, "a_Position");
+	glEnableVertexAttribArray(attribPosition);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glDisableVertexAttribArray(attribPosition);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+void Renderer::DrawBorderXY(float x, float y, float z, float width, float height, float r, float g, float b, float a, float level)
+{
+	float newX, newY;
+
+	GetGLPosition(x, y, &newX, &newY);
+
+	GLuint shader = m_SolidRectXYShader;
+
+	//Program select
+	glUseProgram(shader);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glUniform4f(glGetUniformLocation(shader, "u_Trans"), newX, newY, width, height);
+	glUniform4f(glGetUniformLocation(shader, "u_Color"), r, g, b, a);
+	glUniform1f(glGetUniformLocation(shader, "u_Depth"), level);
+
+	int attribPosition = glGetAttribLocation(shader, "a_Position");
+	glEnableVertexAttribArray(attribPosition);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBORectBorder);
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+
+	glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+	glDisableVertexAttribArray(attribPosition);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+void Renderer::DrawSolidRectGauge(float x, float y, float z, float width, float height, float r, float g, float b, float a, float gauge, float level)
+{
+	DrawBorderXY(x, y, z, width, height, 1, 1, 1, 0.5, level);
+
+	float newX, newY;
+
+	GetGLPosition(x, y, &newX, &newY);
+
+	GLuint shader = m_SolidRectGaugeShader;
+
+	//Program select
+	glUseProgram(shader);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	GLuint u_Trans = glGetUniformLocation(shader, "u_Trans");
+	GLuint u_Color = glGetUniformLocation(shader, "u_Color");
+	GLuint u_Gauge = glGetUniformLocation(shader, "u_Gauge");
+	glUniform1f(glGetUniformLocation(shader, "u_Depth"), level);
+
+	glUniform4f(u_Trans, newX, newY, width, height);
+	glUniform4f(u_Color, r, g, b, a);
+	glUniform1f(u_Gauge, gauge);
+
+	GLuint attribPosition = glGetAttribLocation(shader, "a_Position");
+	GLuint attribTexPosition = glGetAttribLocation(shader, "a_TexPosition");
+	glEnableVertexAttribArray(attribPosition);
+	glEnableVertexAttribArray(attribTexPosition);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBORectTex);
+	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
+	glVertexAttribPointer(attribTexPosition, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (GLvoid*)(sizeof(float) * 3));
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glDisableVertexAttribArray(attribPosition);
+	glDisableVertexAttribArray(attribTexPosition);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 void Renderer::DrawTexturedRect(float x, float y, float z, float size, float r, float g, float b, float a, GLuint texID)
 {
 	float newX, newY;
@@ -322,7 +425,7 @@ void Renderer::GetGLPosition(float x, float y, float *newX, float *newY)
 	*newY = y * 2.f / m_WindowSizeY;
 }
 
-unsigned char * Renderer::loadBMPRaw(const char * imagepath, unsigned int& outWidth, unsigned int& outHeight, bool flipY) 
+unsigned char * Renderer::loadBMPRaw(const char * imagepath, unsigned int& outWidth, unsigned int& outHeight, bool flipY)
 {
 	printf("Reading image %s\n", imagepath);
 	outWidth = -1;
