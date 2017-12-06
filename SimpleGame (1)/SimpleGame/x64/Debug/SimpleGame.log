@@ -1,16 +1,2 @@
-﻿  Object.cpp
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.h(24): warning C4244: 'return': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(35): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(37): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(39): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(41): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(51): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(53): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(55): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(57): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(69): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(71): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(73): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lg\desktop\gseproject\gse_kimhongju_3_2012180053\simplegame (1)\simplegame\object.cpp(75): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Debug\SimpleGame.exe
-  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Debug\SimpleGame.pdb (Partial PDB)
+﻿SceneMgr.obj : error LNK2019: "public: void __cdecl Renderer::DrawTexturedRect(float,float,float,float,float,float,float,float,unsigned int,float)" (?DrawTexturedRect@Renderer@@QEAAXMMMMMMMMIM@Z) 외부 기호(참조 위치: "public: void __cdecl SceneMgr::DrawObjects(float)" (?DrawObjects@SceneMgr@@QEAAXM@Z) 함수)에서 확인하지 못했습니다.
+C:\Users\LG\Desktop\GSE_KIMHONGJU_3_2012180053-master\GSE_KIMHONGJU_3_2012180053-master\SimpleGame (1)\x64\Debug\SimpleGame.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.

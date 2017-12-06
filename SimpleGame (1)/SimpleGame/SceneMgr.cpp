@@ -18,6 +18,7 @@ void SceneMgr::DrawObjects(float Time)
 	Rend->DrawSolidRectXY(0, 0, 0, width, height, 0, 0, 0, 0.3, Time);
 	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
 	Building = Rend->CreatePngTexture("Building.png");
+	BackGround = Rend->CreatePngTexture("Map.png");
 	int texture = -1;
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
@@ -42,7 +43,8 @@ void SceneMgr::DrawObjects(float Time)
 					Objects[i]->Info.g,
 					Objects[i]->Info.b,
 					Objects[i]->Info.a,
-					texture
+					texture,
+					0.1
 				);
 			}
 

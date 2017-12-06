@@ -30,8 +30,9 @@ private:
 	Renderer *Rend;
 	int width;
 	int height;
-	int EnemyBuilding = 0;
-	int Building = 0;
+	int EnemyBuilding;
+	int Building;
+	int BackGround;
 	float EnemyCoolTime = 0;
 	float MyCoolTime = 0;
 };
