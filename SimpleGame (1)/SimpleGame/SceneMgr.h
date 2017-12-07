@@ -14,6 +14,8 @@
 #define MYTEAM 5
 #define BUILDING_GAUGEWIDTH 100
 #define BUILDING_GAUGEHEIGHT 10
+#define BUILDING_LIFE 500
+#define CHARACTER_LIFE 100
 class SceneMgr
 {
 public:
@@ -22,11 +24,11 @@ public:
 	int AddObjects(float, float, int, int);
 	void UpdateObjects(float);
 	void DrawObjects(float);
-
+	void EnemyCharacter(float);
 private:
 	bool TrueFalseCollision(float, float, float, float, float, float, float, float);
 	void Collision();
-	void EnemyCharacter(float);
+	
 	Object *Objects[MAX_OBJECT_COUNT];
 	Object *BulletObjects[MAX_OBJECT_COUNT];
 	Renderer *Rend;
@@ -34,6 +36,8 @@ private:
 	int height;
 	int EnemyBuilding;
 	int Building;
+	int Character;
+	int Enemycharacter;
 	int BackGround;
 	float EnemyCoolTime = 0;
 	float MyCoolTime = 0;

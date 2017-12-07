@@ -11,18 +11,38 @@ SceneMgr::SceneMgr(int width, int height)
 		Objects[i] = NULL;
 		BulletObjects[i] = NULL;
 	}
-}
-
-void SceneMgr::DrawObjects(float Time)
-{
-	Rend->drawText(250, 400, GLUT_BITMAP_TIMES_ROMAN_10, 1, 1, 1, "TempText");
-
-	Rend->DrawSolidRectXY(0, 0, 0, width, height, 0, 0, 0, 0.3, Time);
 	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
 	Building = Rend->CreatePngTexture("Building.png");
 	BackGround = Rend->CreatePngTexture("Map.png");
+	Character = Rend->CreatePngTexture("LD.png");
+	Enemycharacter = Rend->CreatePngTexture("RD.png");
+}
+SceneMgr::~SceneMgr()
+{
+	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	{
+		if (Objects[i] == NULL)
+		{
+			delete Objects[i];
+			Objects[i] = NULL;
+		}
+	}
+	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
+	{
+		if (BulletObjects[i] == NULL)
+		{
+			delete BulletObjects[i];
+			BulletObjects[i] = NULL;
+		}
+	}
+}
+void SceneMgr::DrawObjects(float Time)
+{
+	Rend->DrawSolidRectXY(0, 0, 0, width, height, 0, 0, 0, 0.3, Time);
+	
 
-	int texture = -1;
+	int texture ;
+
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
 		if (Objects[i] != NULL)
@@ -56,15 +76,52 @@ void SceneMgr::DrawObjects(float Time)
 					0,
 					BUILDING_GAUGEWIDTH,
 					BUILDING_GAUGEHEIGHT,
+					0,
 					1,
 					1,
 					1,
-					1,
-					Objects[i]->Info.life / 500,
+					Objects[i]->Info.life / BUILDING_LIFE,
 					0.1
 				);
 			}
+			else if(Objects[i]->Info.type == CHARACTER_OBJECT)
+			{
+				if (Objects[i]->Info.team == ENEMYTEAM)
+				{
+					texture = Enemycharacter;
+				}
+				if (Objects[i]->Info.team == MYTEAM)
+				{
+					texture = Character;
+				}
+				Rend->DrawTexturedRectSeq(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y,
+					0,
+					Objects[i]->Info.size,
+					Objects[i]->Info.r,
+					Objects[i]->Info.g,
+					Objects[i]->Info.b,
+					1,
+					texture,
+					(int)(texture) % 4, 0, 4, 1, 0.2f
+				);
+				texture += 0.5;
 
+				Rend->DrawSolidRectGauge(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y + Objects[i]->Info.size / 2 + 5,
+					0,
+					30,
+					5,
+					Objects[i]->Info.r,
+					Objects[i]->Info.g,
+					Objects[i]->Info.b,
+					1,
+					Objects[i]->Info.life / CHARACTER_LIFE,
+					0.2
+				);
+			}
 						
 			else
 			{
@@ -84,25 +141,7 @@ void SceneMgr::DrawObjects(float Time)
 	}
 }
 
-SceneMgr::~SceneMgr()
-{
-	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
-	{
-		if (Objects[i] == NULL)
-		{
-			delete Objects[i];
-			Objects[i] = NULL;
-		}
-	}
-	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
-	{
-		if (BulletObjects[i] == NULL)
-		{
-			delete BulletObjects[i];
-			BulletObjects[i] = NULL;
-		}
-	}
-}
+
 
 int SceneMgr::AddObjects(float x, float y, int type, int team)
 {
