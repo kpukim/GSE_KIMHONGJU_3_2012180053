@@ -14,8 +14,8 @@ SceneMgr::SceneMgr(int width, int height)
 	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
 	Building = Rend->CreatePngTexture("Building.png");
 	BackGround = Rend->CreatePngTexture("Map.png");
-	Character = Rend->CreatePngTexture("LD.png");
-	Enemycharacter = Rend->CreatePngTexture("RD.png");
+	Character = Rend->CreatePngTexture("Character.png");
+	Enemycharacter = Rend->CreatePngTexture("EnemyCharacter.png");
 }
 SceneMgr::~SceneMgr()
 {
