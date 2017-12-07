@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "Object.h"
 
+
 #define MAX_OBJECT_COUNT 1000
 #define CHARACTER_OBJECT 0
 #define BUILDING_OBJECT 1
@@ -11,7 +12,8 @@
 #define ARROW_OBJECT 3
 #define ENEMYTEAM 4
 #define MYTEAM 5
-
+#define BUILDING_GAUGEWIDTH 100
+#define BUILDING_GAUGEHEIGHT 10
 class SceneMgr
 {
 public:

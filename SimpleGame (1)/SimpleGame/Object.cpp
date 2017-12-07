@@ -32,10 +32,8 @@ Object::Object(float x, float y, int type, int fieldWidth, int fieldHeight, int 
 		}
 		Info.dirX = 0;
 		Info.dirY = 0;
-
 		Info.size = 100;
 		Info.life = 500;
-
 		Info.lifetime = 100000;
 	}
 	else if (type == CHARACTER_OBJECT)
@@ -159,5 +157,7 @@ void Object::Update(float Time)
 	Info.arrow += elapsedTimeInSecond;
 	Info.x = Info.x + Info.dirX * elapsedTimeInSecond;
 	Info.y = Info.y + Info.dirY * elapsedTimeInSecond;
+
+
 }
 

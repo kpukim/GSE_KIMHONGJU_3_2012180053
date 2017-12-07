@@ -25,7 +25,9 @@ bool Button = false;
 
 void RenderScene(void)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.0f, 0.3f, 0.3f, 1.0f);
+	glClearDepth(1.f);
 
 	DWORD CurrentTime = timeGetTime();
 	DWORD elapsedTime = CurrentTime - g_prevTime;
@@ -33,6 +35,9 @@ void RenderScene(void)
 
 	g_SceneMgr->UpdateObjects(elapsedTime);
 	g_SceneMgr->DrawObjects(elapsedTime);
+
+
+	
 	glutSwapBuffers();
 }
 

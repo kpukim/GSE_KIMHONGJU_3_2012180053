@@ -15,10 +15,13 @@ SceneMgr::SceneMgr(int width, int height)
 
 void SceneMgr::DrawObjects(float Time)
 {
+	Rend->drawText(250, 400, GLUT_BITMAP_TIMES_ROMAN_10, 1, 1, 1, "TempText");
+
 	Rend->DrawSolidRectXY(0, 0, 0, width, height, 0, 0, 0, 0.3, Time);
 	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
 	Building = Rend->CreatePngTexture("Building.png");
 	BackGround = Rend->CreatePngTexture("Map.png");
+
 	int texture = -1;
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
@@ -30,11 +33,12 @@ void SceneMgr::DrawObjects(float Time)
 				{
 					texture = EnemyBuilding;
 				}
-				else if (Objects[i]->Info.team == MYTEAM)
+				if (Objects[i]->Info.team == MYTEAM)
 				{
 					texture = Building;
 				}
-				Rend->DrawTexturedRect(
+				Rend->DrawTexturedRect
+				(
 					Objects[i]->Info.x,
 					Objects[i]->Info.y,
 					0,
@@ -46,34 +50,22 @@ void SceneMgr::DrawObjects(float Time)
 					texture,
 					0.1
 				);
+				Rend->DrawSolidRectGauge(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y + Objects[i]->Info.size / 2 + 5,
+					0,
+					BUILDING_GAUGEWIDTH,
+					BUILDING_GAUGEHEIGHT,
+					1,
+					1,
+					1,
+					1,
+					Objects[i]->Info.life / 500,
+					0.1
+				);
 			}
 
-			/*Rend->DrawTexturedRect(
-				Objects[i]->Info.x,
-				Objects[i]->Info.y,
-				0,
-				Objects[i]->Info.size,
-				1,
-				1,
-				1,
-				1,
-				texture,
-				0.1f
-			);
-
-			Rend->DrawSolidRectGauge(
-				Objects[i]->Info.x,
-				Objects[i]->Info.y + Objects[i]->Info.size / 2,
-				0,
-				100,
-				10,
-				Objects[i]->Info.r,
-				Objects[i]->Info.g,
-				Objects[i]->Info.b,
-				1.f,
-				Objects[i]->Info.life / 500,
-				0.01f
-			);*/
+						
 			else
 			{
 				Rend->DrawSolidRect(
@@ -116,7 +108,7 @@ int SceneMgr::AddObjects(float x, float y, int type, int team)
 {
 	if (team == MYTEAM && type == CHARACTER_OBJECT)
 	{
-		if (MyCoolTime < 7.f)
+		if (MyCoolTime < 7)
 		{
 			return -1;
 		}
@@ -124,7 +116,7 @@ int SceneMgr::AddObjects(float x, float y, int type, int team)
 		{
 			return -1;
 		}
-		MyCoolTime = 0.f;
+		MyCoolTime = 0;
 	}
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
@@ -139,8 +131,8 @@ int SceneMgr::AddObjects(float x, float y, int type, int team)
 
 void SceneMgr::EnemyCharacter(float Time)
 {
-	EnemyCoolTime += Time / 1000.f;
-	if (EnemyCoolTime > 5.f)
+	EnemyCoolTime += Time / 1000;
+	if (EnemyCoolTime > 5)
 	{
 		int x, y;
 		x = (int)(height * rand() / (float)RAND_MAX);
@@ -159,7 +151,7 @@ void SceneMgr::UpdateObjects(float Time)
 	{
 		if (Objects[i] != NULL)
 		{
-			if (Objects[i]->GetLife() < 0.0001f || Objects[i]->GetLifeTime() < 0.0001f)
+			if (Objects[i]->GetLife() < 0.0001 || Objects[i]->GetLifeTime() < 0.0001)
 			{
 				if (Objects[i]->GetType() == CHARACTER_OBJECT)
 				{
@@ -180,7 +172,7 @@ void SceneMgr::UpdateObjects(float Time)
 				Objects[i]->Update(Time);
 				if (Objects[i]->GetType() == BUILDING_OBJECT)
 				{
-					if (Objects[i]->Info.bullet > 10.f)
+					if (Objects[i]->Info.bullet > 10)
 					{
 						int bulletID = AddObjects(
 							Objects[i]->Info.x,
@@ -188,16 +180,16 @@ void SceneMgr::UpdateObjects(float Time)
 							BULLET_OBJECT,
 							Objects[i]->Info.team);
 
-						Objects[i]->Info.bullet = 0.f;
+						Objects[i]->Info.bullet =0;
 
 					}
 				}
 				if (Objects[i]->GetType() == CHARACTER_OBJECT)
 				{
-					if (Objects[i]->Info.arrow > 3.f)
+					if (Objects[i]->Info.arrow > 3)
 					{
 						int arrowID = AddObjects(Objects[i]->Info.x, Objects[i]->Info.y, ARROW_OBJECT, Objects[i]->Info.team);
-						Objects[i]->Info.arrow = 0.f;
+						Objects[i]->Info.arrow = 0;
 					}
 				}
 			}
@@ -211,11 +203,8 @@ void SceneMgr::UpdateObjects(float Time)
 
 void SceneMgr::Collision()
 {
-	int collisionCount = 0;
-
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
-		collisionCount = 0;
 		if (Objects[i] != NULL)
 		{
 			for (int j = i + 1; j < MAX_OBJECT_COUNT; j++)
@@ -237,44 +226,42 @@ void SceneMgr::Collision()
 						if ((Objects[i]->GetType() == BUILDING_OBJECT) && (Objects[j]->GetType() == CHARACTER_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[i]->SetDamage(Objects[j]->GetLife());
-							Objects[j]->Info.life = 0.f;
-							collisionCount++;
+							Objects[j]->Info.life = 0;
 						}
 						else if ((Objects[j]->GetType() == BUILDING_OBJECT) && (Objects[i]->GetType() == CHARACTER_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[j]->SetDamage(Objects[i]->GetLife());
-							Objects[i]->Info.life = 0.f;
-							collisionCount++;
+							Objects[i]->Info.life = 0;
 						}
 						else if ((Objects[i]->GetType() == CHARACTER_OBJECT) && (Objects[j]->GetType() == BULLET_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[i]->SetDamage(Objects[j]->GetLife());
-							Objects[j]->Info.life = 0.f;
+							Objects[j]->Info.life = 0;
 						}
 						else if ((Objects[j]->GetType() == CHARACTER_OBJECT) && (Objects[i]->GetType() == BULLET_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[j]->SetDamage(Objects[i]->GetLife());
-							Objects[i]->Info.life = 0.f;
+							Objects[i]->Info.life = 0;
 						}
 						else if ((Objects[i]->GetType() == CHARACTER_OBJECT) && (Objects[j]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[i]->SetDamage(Objects[j]->GetLife());
-							Objects[j]->Info.life = 0.f;
+							Objects[j]->Info.life = 0;
 						}
 						else if ((Objects[j]->GetType() == CHARACTER_OBJECT) && (Objects[i]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[j]->SetDamage(Objects[i]->GetLife());
-							Objects[i]->Info.life = 0.f;
+							Objects[i]->Info.life = 0;
 						}
 						else if ((Objects[i]->GetType() == BUILDING_OBJECT) && (Objects[j]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[i]->SetDamage(Objects[j]->GetLife());
-							Objects[j]->Info.life = 0.f;
+							Objects[j]->Info.life = 0;
 						}
 						else if ((Objects[j]->GetType() == BUILDING_OBJECT) && (Objects[i]->GetType() == ARROW_OBJECT) && (Objects[i]->Info.team != Objects[j]->Info.team))
 						{
 							Objects[j]->SetDamage(Objects[i]->GetLife());
-							Objects[i]->Info.life = 0.f;
+							Objects[i]->Info.life = 0;
 						}
 					}
 				}
