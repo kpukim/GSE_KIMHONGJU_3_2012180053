@@ -10,18 +10,19 @@ but WITHOUT ANY WARRANTY.
 
 #include "stdafx.h"
 #include "windows.h"
-
 #include "SceneMgr.h"
 #include "Object.h"
-
 #include <iostream>
 #include "Dependencies\glew.h"
 #include "Dependencies\freeglut.h"
 
+#define WIDTH 500
+#define HEIGHT 800
 SceneMgr *g_SceneMgr = NULL;
 DWORD g_prevTime = 0;
-
 bool Button = false;
+
+Sound* g_Sound = NULL;
 
 void RenderScene(void)
 {
@@ -81,7 +82,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(500, 800);
+	glutInitWindowSize(WIDTH, HEIGHT);
 	glutCreateWindow("Game Software Engineering KPU");
 	glewInit();
 	if (glewIsSupported("GL_VERSION_3_0"))
@@ -92,20 +93,26 @@ int main(int argc, char **argv)
 	{
 		std::cout << "GLEW 3.0 not supported\n ";
 	}
+
+	g_Sound = new Sound();
+	int Sound = g_Sound->CreateSound("SoundSample.mp3");
+	g_Sound->PlaySoundGSE(Sound, true, 1);
+
+
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyInput);
 	glutMouseFunc(MouseInput);
 	glutSpecialFunc(SpecialKeyInput);
-	g_SceneMgr = new SceneMgr(500, 800);
+	g_SceneMgr = new SceneMgr(WIDTH, HEIGHT);
 
-	g_SceneMgr->AddObjects(-150, 300, BUILDING_OBJECT, ENEMYTEAM);
-	g_SceneMgr->AddObjects(0, 300, BUILDING_OBJECT, ENEMYTEAM);
-	g_SceneMgr->AddObjects(150, 300, BUILDING_OBJECT, ENEMYTEAM);
-	g_SceneMgr->AddObjects(-150, -300, BUILDING_OBJECT, MYTEAM);
+	g_SceneMgr->AddObjects(-205, 230, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(0, 330, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(205, 230, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(-205, -200, BUILDING_OBJECT, MYTEAM);
 	g_SceneMgr->AddObjects(0, -300, BUILDING_OBJECT, MYTEAM);
-	g_SceneMgr->AddObjects(150, -300, BUILDING_OBJECT, MYTEAM);
-
+	g_SceneMgr->AddObjects(205, -200, BUILDING_OBJECT, MYTEAM);
+	
 	g_prevTime = timeGetTime();
 	glutMainLoop();
 	delete g_SceneMgr;

@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdlib>
 
+class Renderer;
 struct Information
 {
 	float x, y, dirX, dirY, r, g, b, a, size, life, lifetime;
@@ -9,6 +10,10 @@ struct Information
 };
 class Object
 {
+private:
+	Renderer* rend;
+	
+
 public:
 	Object(float, float, int, int, int, int);
 	~Object();

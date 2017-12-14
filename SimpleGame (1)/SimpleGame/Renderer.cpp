@@ -826,8 +826,6 @@ void Renderer::DrawTexturedRectSeqXY(float x, float y, float z, float width, flo
 
 void Renderer::DrawParticle(float x, float y, float z, float size, float r, float g, float b, float a, float gDirX, float gDirY, GLuint texID, float timeInSeconds)
 {
-	GLuint tID = m_textureList[texID];
-
 	float newX, newY;
 
 	GetGLPosition(x, y, &newX, &newY);
@@ -869,7 +867,7 @@ void Renderer::DrawParticle(float x, float y, float z, float size, float r, floa
 	glUniform3f(u_TrailDir, gDirX, gDirY, 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tID);
+	glBindTexture(GL_TEXTURE_2D, texID);
 
 	glDrawArrays(GL_TRIANGLES, 0, m_ParticleVertexCount);
 

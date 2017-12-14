@@ -11,11 +11,13 @@ SceneMgr::SceneMgr(int width, int height)
 		Objects[i] = NULL;
 		BulletObjects[i] = NULL;
 	}
+
 	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
 	Building = Rend->CreatePngTexture("Building.png");
 	BackGround = Rend->CreatePngTexture("Map.png");
 	Character = Rend->CreatePngTexture("Character.png");
 	Enemycharacter = Rend->CreatePngTexture("EnemyCharacter.png");
+	Particle = Rend->CreatePngTexture("ParticleEffect.png");
 }
 SceneMgr::~SceneMgr()
 {
@@ -38,25 +40,39 @@ SceneMgr::~SceneMgr()
 }
 void SceneMgr::DrawObjects(float Time)
 {
-	Rend->DrawSolidRectXY(0, 0, 0, width, height, 0, 0, 0, 0.3, Time);
-	
-
-	int texture ;
-
+	Rend->DrawTexturedRectXY(0, 0, 0, WIDTH, HEIGHT, 1, 1, 1, 1, BackGround, 0.9);
+	Rend->drawText
+	(
+		-60,
+		150 ,
+		GLUT_BITMAP_TIMES_ROMAN_24,
+		0,
+		0, 
+		0,
+		"Enemy Team"
+	);
+	Rend->drawText
+	(
+		-50,
+		-150,
+		GLUT_BITMAP_TIMES_ROMAN_24,
+		0,
+		0,
+		0,
+		"My Team"
+	);
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
 		if (Objects[i] != NULL)
 		{
 			if (Objects[i]->Info.type == BUILDING_OBJECT)
-			{		
+			{
 				if (Objects[i]->Info.team == ENEMYTEAM)
-				{
 					texture = EnemyBuilding;
-				}
+
 				if (Objects[i]->Info.team == MYTEAM)
-				{
 					texture = Building;
-				}
+
 				Rend->DrawTexturedRect
 				(
 					Objects[i]->Info.x,
@@ -70,50 +86,51 @@ void SceneMgr::DrawObjects(float Time)
 					texture,
 					0.1
 				);
-				Rend->DrawSolidRectGauge(
+			
+				Rend->DrawSolidRectGauge
+				(
 					Objects[i]->Info.x,
 					Objects[i]->Info.y + Objects[i]->Info.size / 2 + 5,
 					0,
 					BUILDING_GAUGEWIDTH,
 					BUILDING_GAUGEHEIGHT,
-					0,
+					2,
 					1,
-					1,
+					2,
 					1,
 					Objects[i]->Info.life / BUILDING_LIFE,
 					0.1
 				);
 			}
-			else if(Objects[i]->Info.type == CHARACTER_OBJECT)
+			else if (Objects[i]->Info.type == CHARACTER_OBJECT)
 			{
 				if (Objects[i]->Info.team == ENEMYTEAM)
-				{
 					texture = Enemycharacter;
-				}
+
 				if (Objects[i]->Info.team == MYTEAM)
-				{
 					texture = Character;
-				}
-				Rend->DrawTexturedRectSeq(
+				
+				Rend->DrawTexturedRectSeq
+				(
 					Objects[i]->Info.x,
 					Objects[i]->Info.y,
 					0,
 					Objects[i]->Info.size,
-					Objects[i]->Info.r,
-					Objects[i]->Info.g,
-					Objects[i]->Info.b,
+					1,
+					1,
+					1,
 					1,
 					texture,
-					(int)(texture) % 4, 0, 4, 1, 0.2f
+					0,0,4,1,
+					0.2
 				);
-				texture += 0.5;
-
-				Rend->DrawSolidRectGauge(
+				Rend->DrawSolidRectGauge
+				(
 					Objects[i]->Info.x,
 					Objects[i]->Info.y + Objects[i]->Info.size / 2 + 5,
 					0,
-					30,
-					5,
+					CHARACTER_GAUGEWIDTH,
+					CHARACTER_GAUGEHEIGHT,
 					Objects[i]->Info.r,
 					Objects[i]->Info.g,
 					Objects[i]->Info.b,
@@ -122,10 +139,26 @@ void SceneMgr::DrawObjects(float Time)
 					0.2
 				);
 			}
-						
-			else
-			{
-				Rend->DrawSolidRect(
+			else if (Objects[i]->Info.type == BULLET_OBJECT)
+			{				
+				Rend->DrawParticle
+				(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y,
+					0,
+					Objects[i]->Info.size, 
+					1,
+					1,
+					1,
+					1,
+					Objects[i]->Info.dirX*(-5),
+					Objects[i]->Info.dirY*(-5),
+					Particle,
+					Second
+				);
+
+				Rend->DrawSolidRect
+				(
 					Objects[i]->Info.x,
 					Objects[i]->Info.y,
 					0,
@@ -134,7 +167,22 @@ void SceneMgr::DrawObjects(float Time)
 					Objects[i]->Info.g,
 					Objects[i]->Info.b,
 					Objects[i]->Info.a,
-					Time
+					0.3
+				);
+			}
+			else if (Objects[i]->Info.type == ARROW_OBJECT)
+			{
+				Rend->DrawSolidRect
+				(
+					Objects[i]->Info.x,
+					Objects[i]->Info.y,
+					0,
+					Objects[i]->Info.size,
+					Objects[i]->Info.r,
+					Objects[i]->Info.g,
+					Objects[i]->Info.b,
+					Objects[i]->Info.a,
+					0.3
 				);
 			}
 		}
@@ -147,14 +195,10 @@ int SceneMgr::AddObjects(float x, float y, int type, int team)
 {
 	if (team == MYTEAM && type == CHARACTER_OBJECT)
 	{
-		if (MyCoolTime < 7)
-		{
+		if (MyCoolTime < 2)
 			return -1;
-		}
 		if (y > 0)
-		{
 			return -1;
-		}
 		MyCoolTime = 0;
 	}
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
@@ -171,7 +215,7 @@ int SceneMgr::AddObjects(float x, float y, int type, int team)
 void SceneMgr::EnemyCharacter(float Time)
 {
 	EnemyCoolTime += Time / 1000;
-	if (EnemyCoolTime > 5)
+	if (EnemyCoolTime > 1)
 	{
 		int x, y;
 		x = (int)(height * rand() / (float)RAND_MAX);

@@ -158,6 +158,13 @@ void Object::Update(float Time)
 	Info.x = Info.x + Info.dirX * elapsedTimeInSecond;
 	Info.y = Info.y + Info.dirY * elapsedTimeInSecond;
 
+	if (Info.type == CHARACTER_OBJECT)
+	{
+		if (Info.x < -500 / 2 || Info.x > 500 / 2)
+			Info.dirX *= -1;
 
+		if (Info.y < -800 / 2 || Info.y > 800 / 2)
+			Info.dirY *= -1;
+	}
 }
 
