@@ -1,17 +1,2 @@
-﻿  SceneMgr.cpp
-SceneMgr.cpp(39): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(91): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(106): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(131): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(145): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(164): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(176): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(190): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-SceneMgr.cpp(231): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다.
-  25 of 516 functions ( 4.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  코드를 생성했습니다.
-  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.exe
+﻿  SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.exe
   SimpleGame.vcxproj -> C:\Users\LG\Desktop\GSEProject\GSE_KIMHONGJU_3_2012180053\SimpleGame (1)\x64\Release\SimpleGame.pdb (Full PDB)

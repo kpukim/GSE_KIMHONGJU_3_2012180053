@@ -106,12 +106,12 @@ int main(int argc, char **argv)
 	glutSpecialFunc(SpecialKeyInput);
 	g_SceneMgr = new SceneMgr(WIDTH, HEIGHT);
 
-	g_SceneMgr->AddObjects(-205, 230, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(-150, 230, BUILDING_OBJECT, ENEMYTEAM);
 	g_SceneMgr->AddObjects(0, 330, BUILDING_OBJECT, ENEMYTEAM);
-	g_SceneMgr->AddObjects(205, 230, BUILDING_OBJECT, ENEMYTEAM);
-	g_SceneMgr->AddObjects(-205, -200, BUILDING_OBJECT, MYTEAM);
+	g_SceneMgr->AddObjects(150, 230, BUILDING_OBJECT, ENEMYTEAM);
+	g_SceneMgr->AddObjects(-140, -200, BUILDING_OBJECT, MYTEAM);
 	g_SceneMgr->AddObjects(0, -300, BUILDING_OBJECT, MYTEAM);
-	g_SceneMgr->AddObjects(205, -200, BUILDING_OBJECT, MYTEAM);
+	g_SceneMgr->AddObjects(140, -200, BUILDING_OBJECT, MYTEAM);
 	
 	g_prevTime = timeGetTime();
 	glutMainLoop();

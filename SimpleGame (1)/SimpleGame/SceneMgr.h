@@ -43,7 +43,7 @@ private:
 	Renderer *Rend;
 	int width;
 	int height;
-	float Second;
+	float Second = 0;
 	int EnemyBuilding;
 	int Building;
 	int Character;

@@ -11,7 +11,6 @@ SceneMgr::SceneMgr(int width, int height)
 		Objects[i] = NULL;
 		BulletObjects[i] = NULL;
 	}
-
 	EnemyBuilding = Rend->CreatePngTexture("EnemyBuilding.png");
 	Building = Rend->CreatePngTexture("Building.png");
 	BackGround = Rend->CreatePngTexture("Map.png");
@@ -41,9 +40,10 @@ SceneMgr::~SceneMgr()
 void SceneMgr::DrawObjects(float Time)
 {
 	Rend->DrawTexturedRectXY(0, 0, 0, WIDTH, HEIGHT, 1, 1, 1, 1, BackGround, 0.9);
-	Rend->drawText
+
+	Rend->DrawTextGSE
 	(
-		-60,
+		0,
 		150 ,
 		GLUT_BITMAP_TIMES_ROMAN_24,
 		0,
@@ -51,9 +51,10 @@ void SceneMgr::DrawObjects(float Time)
 		0,
 		"Enemy Team"
 	);
-	Rend->drawText
+
+	Rend->DrawTextGSE
 	(
-		-50,
+		0,
 		-150,
 		GLUT_BITMAP_TIMES_ROMAN_24,
 		0,
@@ -61,6 +62,7 @@ void SceneMgr::DrawObjects(float Time)
 		0,
 		"My Team"
 	);
+
 	for (int i = 0; i < MAX_OBJECT_COUNT; i++)
 	{
 		if (Objects[i] != NULL)
@@ -124,6 +126,7 @@ void SceneMgr::DrawObjects(float Time)
 					0,0,4,1,
 					0.2
 				);
+				texture += 0.25;
 				Rend->DrawSolidRectGauge
 				(
 					Objects[i]->Info.x,
@@ -140,7 +143,8 @@ void SceneMgr::DrawObjects(float Time)
 				);
 			}
 			else if (Objects[i]->Info.type == BULLET_OBJECT)
-			{				
+			{			
+				texture = Particle;
 				Rend->DrawParticle
 				(
 					Objects[i]->Info.x,
@@ -153,9 +157,11 @@ void SceneMgr::DrawObjects(float Time)
 					1,
 					Objects[i]->Info.dirX*(-5),
 					Objects[i]->Info.dirY*(-5),
-					Particle,
-					Second
+					texture,
+					Second,
+					0.9
 				);
+				Second += 0.025;
 
 				Rend->DrawSolidRect
 				(
@@ -187,8 +193,17 @@ void SceneMgr::DrawObjects(float Time)
 			}
 		}
 	}
+	Rend->DrawParticleClimate
+	(
+		0,
+		0, 0, 1, 1, 1, 1, 1,
+		-0.1,
+		-0.1,
+		Particle,
+		Time,
+		0.01
+	);
 }
-
 
 
 int SceneMgr::AddObjects(float x, float y, int type, int team)
